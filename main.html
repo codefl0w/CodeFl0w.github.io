@@ -1,0 +1,152 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fl0w Archive</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #161c2b;
+            color: white;
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+        nav {
+            position: sticky;
+            top: 0;
+            background-color:  #202a42;
+            color: white;
+            padding: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: space-around;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+            transition: background-color 0.3s ease;
+        }
+        nav ul li a:hover {
+            background-color: #555;
+            border-radius: 5px;
+        }
+        .collapsible-section h2 {
+            cursor: pointer;
+            background-color: #30d780;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .collapsible-section .content {
+            max-height: 0;
+            overflow: hidden;
+            padding: 0 10px;
+            background: #222;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+        }
+        .collapsible-section .content.show {
+            max-height: 500px; /* Adjust as needed */
+            padding: 10px;
+        }
+        .section {
+            display: none;
+            padding: 20px;
+        }
+        .section.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <center>
+        <h1 style="color: #ff8ff5;">fl0w Archive</h1>
+    </center>
+    <hr>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <ul>
+            <li><a href="#home" data-section="home">Home</a></li>
+            <li><a href="#about" data-section="about">About</a></li>
+            <li><a href="#contact" data-section="contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Home Section -->
+    <div id="home" class="section active">
+        <h2>Home</h2>
+        <div class="collapsible-section">
+            <h2>Tools</h2>
+            <div class="content">
+                <a style="color: white;" href="https://www.mediafire.com/file/a5ur9tyegidzsa8/QuickADB.exe/file">All QuickADB Versions</a><br>
+                <a style="color: white;" href="https://www.mediafire.com/folder/yx7d1k2aen2kf/MediaTek">All Tools &amp; Drivers [MTK]</a><br>
+                <a style="color: white;" href="https://www.mediafire.com/folder/">All Tools &amp; Drivers [QCOM]</a><br>
+                <a style="color: white;" href="https://www.mediafire.com/folder/">All Tools &amp; Drivers [SPD]</a><br>
+            </div>
+        </div>
+
+        <div class="collapsible-section">
+            <h2>OEM Resources</h2>
+            <div class="content">
+                <h3 style="color: rgb(255, 94, 0);">Xiaomi</h3>
+                <a style="color: white;" href="https://www.mediafire.com/folder/">All Tools &amp; Drivers [XIAOMI]</a><br>
+                <h3 style="color: #4854ff;">Samsung</h3>
+                <a style="color: white;" href="https://www.mediafire.com/folder/">How to Use Odin3 to Flash firmware to Samsung Devices</a><br>
+            </div>
+        </div>
+
+        <div class="collapsible-section">
+            <h2>Tutorials</h2>
+            <div class="content">
+                <a style="color: white;" href="https://www.mediafire.com/folder/">Unbricking MTK Devices via BROM Mode using SPFT</a><br>
+                <a style="color: white;" href="https://www.mediafire.com/folder/">Unbricking QCOM Devices via EDL Mode using QFIL</a><br>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <div id="about" class="section">
+        <h2>About</h2>
+        <p>This is a platform for archiving tools and resources related to Android development. THIS WEBSITE IS CURRENTLY NOT FINISHED AND IS ONLY A PLACEHOLDER.</p>
+    </div>
+
+    <!-- Contact Section -->
+    <div id="contact" class="section">
+        <h2>Contact</h2>
+        <p>Email: blabla</p>
+    </div>
+
+    <script>
+        // Collapsibles
+        document.querySelectorAll('.collapsible-section h2').forEach(header => {
+            header.addEventListener('click', () => {
+                const content = header.nextElementSibling;
+                content.classList.toggle('show');
+            });
+        });
+
+        // Navigation Section Control
+        const sections = document.querySelectorAll('.section');
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', event => {
+                event.preventDefault();
+                const sectionId = link.dataset.section;
+
+                // Hide all sections
+                sections.forEach(section => {
+                    section.classList.remove('active');
+                });
+
+                // Show the selected section
+                document.getElementById(sectionId).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
