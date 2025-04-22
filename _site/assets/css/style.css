@@ -1,0 +1,65 @@
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  background: #151c2c;
+  color: #e0e0e0;
+}
+
+
+header {
+  background: #1b223a;
+  color: #ff8ff5;
+  padding: 1rem;
+  text-align: center;
+}
+
+div.dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  padding: 2rem;
+}
+
+a.card {
+  background: #1b223a;
+  border: 1px solid #222f4b;
+  padding: 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #e0e0e0;
+  box-shadow: 0 2px 6px #404f7a;
+  transition: all 0.2s ease;
+}
+
+a.card:hover {
+  box-shadow: 0 4px 12px #404f7a;
+  transform: translateY(-2px);
+}
+
+a {
+  color: #ff8ff5;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button, .btn {
+  background-color: #ff8ff5;
+  color: #121212;
+  border: none;
+  padding: 0.5em 1em;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button:hover, .btn:hover {
+  background-color: #c54bbb;
+}
+
+@media (max-width: 600px) {
+  header h1 {
+    font-size: 1.5rem;
+  }
+}
