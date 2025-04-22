@@ -62,4 +62,12 @@ button:hover, .btn:hover {
   header h1 {
     font-size: 1.5rem;
   }
+
 }
+main > p,
+main > h1,
+main > h2,
+main > h3 {
+  padding: 0 1.5rem;
+}
+
