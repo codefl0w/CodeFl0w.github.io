@@ -48,7 +48,7 @@
       padding: 0 1.5rem;
     }
   </style>
-</head>
+</head> 
 <body>
   <a href="javascript:history.back()" style="
     position: absolute;
@@ -70,7 +70,8 @@
 
   <main class="tool-container">
     <p>Tap any of the actions below to launch them in Android. These use intent URLs and are compatible with most Android FRP scenarios.</p>
-
+  
+    <center><h2>Universal</h2></center>
     <div class="tool-grid">
       <a class="tool-button" href="intent://com.android.settings/#Intent;scheme=android-app;end">
         <img src="/assets/img/icons/settings.png" alt="Settings Icon">
@@ -96,58 +97,53 @@
         <img src="/assets/img/icons/lock.png" alt="Lock Icon">
         Set Lock Screen
       </a>
-      
-      <a class="tool-button" href="intent://com.mi.android.globalFileexplorer/#Intent;scheme=android-app;end">
-        <img src="/assets/img/icons/mi-file.png" alt="Mi File Manager Icon">
-       Open Mi File Manager
-      </a>
-
-      <a class="tool-button" href="intent://com.sec.android.app.myfiles/#Intent;scheme=android-app;end">
-        <img src="/assets/img/icons/samsung-file.png" alt="Samsung File Manager Icon">
-        Open Samsung File Manager
-      </a>
-
-      <a class="tool-button" href="intent://com.sec.android.app.samsungapps/#Intent;scheme=android-app;end">
-        <img src="/assets/img/icons/galaxy-store.png" alt="Galaxy Store Icon">
-        Open Galaxy Store
-      </a>
-
       <a class="tool-button" href="intent://com.google.android.documentsui/#Intent;scheme=android-app;end">
         <img src="/assets/img/icons/files.png" alt="DocumentsUI Icon">
         Open Android File Explorer
       </a>
-
-      <a class="tool-button" href="intent://com.sec.android.app.sbrowser/#Intent;scheme=android-app;end">
-        <img src="/assets/img/icons/samsung-browser.png" alt="Samsung Browser Icon">
-        Open Samsung Browser
-      </a>
-      
-      <a class="tool-button" href="intent://com.mi.globalbrowser/#Intent;scheme=android-app;end">
-        <img src="/assets/img/icons/mi-browser-global.png" alt="Mi Browser Icon">
-       Open Mi Browser (Global)
-      </a>
-
       <a class="tool-button" href="intent://com.android.browser/#Intent;scheme=android-app;end">
-        <img src="/assets/img/icons/aosp.png" alt="MiCN / AOSP Browser Icon">
-       Open AOSP Browser / Mi Browser (China)
+        <img src="/assets/img/icons/aosp.png" alt="AOSP Browser Icon">
+        Open AOSP Browser / Mi Browser (China)
       </a>
-
       <a class="tool-button" href="intent://com.android.quickstep/#Intent;scheme=android-app;end">
         <img src="/assets/img/icons/quickstep.png" alt="QuickStep Icon">
         Open Android Launcher (QuickStep)
       </a>
-
-      <a class="tool-button" href="intent://com.miui.home/#Intent;scheme=android-app;end">
-        <img src="/assets/img/icons/mi-launcher.png" alt="Mi Launcher Icon">
-        Open Mi Launcher
-      </a>
-
       <a class="tool-button" href="intent://com.android.settings/.accounts.AddAccountsSettings#Intent;scheme=android-app;end">
         <img src="/assets/img/icons/add-account.png" alt="Add Account Icon">
         Add Account
       </a>
-
+    </div>
+  
+    <center><h2>Samsung</h2></center>
+    <div class="tool-grid">
+      <a class="tool-button" href="intent://com.sec.android.app.myfiles/#Intent;scheme=android-app;end">
+        <img src="/assets/img/icons/samsung-file.png" alt="Samsung File Manager Icon">
+        Open Samsung File Manager
+      </a>
+      <a class="tool-button" href="intent://com.sec.android.app.samsungapps/#Intent;scheme=android-app;end">
+        <img src="/assets/img/icons/galaxy-store.png" alt="Galaxy Store Icon">
+        Open Galaxy Store
+      </a>
+      <a class="tool-button" href="intent://com.sec.android.app.sbrowser/#Intent;scheme=android-app;end">
+        <img src="/assets/img/icons/samsung-browser.png" alt="Samsung Browser Icon">
+        Open Samsung Browser
+      </a>
+    </div>
+  
+    <center><h2>Xiaomi</h2></center>
+    <div class="tool-grid">
+      <a class="tool-button" href="intent://com.mi.android.globalFileexplorer/#Intent;scheme=android-app;end">
+        <img src="/assets/img/icons/mi-file.png" alt="Mi File Manager Icon">
+        Open Mi File Manager
+      </a>
+      <a class="tool-button" href="intent://com.mi.globalbrowser/#Intent;scheme=android-app;end">
+        <img src="/assets/img/icons/mi-browser-global.png" alt="Mi Browser Icon">
+        Open Mi Browser (Global)
+      </a>
+      <a class="tool-button" href="intent://com.miui.home/#Intent;scheme=android-app;end">
+        <img src="/assets/img/icons/mi-launcher.png" alt="Mi Launcher Icon">
+        Open Mi Launcher
+      </a>
     </div>
   </main>
-</body>
-</html>
