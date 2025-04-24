@@ -43,13 +43,70 @@
       margin-bottom: 0.5rem;
     }
 
-    header h1,
-    h2 {
-      padding: 0 1.5rem;
+    .tool-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .tool-actions a,
+    .tool-actions button {
+      font-size: 0.85rem;
+      padding: 0.3rem 0.6rem;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn-launch {
+      background-color: #ff8ff5;
+      color: #121212;
+      text-decoration: none;
+    }
+
+    .btn-qr {
+      background-color: #d853cd;
+      color: #fff;
+    }
+
+    .qr-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .qr-overlay img {
+      max-width: 90vw;
+      max-height: 90vh;
+      border: 6px solid #fff;
+      border-radius: 12px;
     }
   </style>
-</head> 
+  <script>
+    function showQR(id, imgSrc) {
+      const overlay = document.getElementById('qr-popup');
+      const qrImg = document.getElementById('qr-img');
+      qrImg.src = imgSrc;
+      overlay.style.display = 'flex';
+    }
+    function hideQR() {
+      document.getElementById('qr-popup').style.display = 'none';
+    }
+  </script>
+</head>
 <body>
+  <div id="qr-popup" class="qr-overlay" onclick="hideQR()">
+    <img id="qr-img" src="" alt="QR Code">
+  </div>
+
   <a href="javascript:history.back()" style="
     position: absolute;
     top: 1rem;
@@ -73,78 +130,141 @@
 
     <center><h2>Universal</h2></center>
     <div class="tool-grid">
-      <a class="tool-button" href="intent://com.android.settings/#Intent;scheme=android-app;end">
+      <div class="tool-button">
         <img src="/assets/img/icons/settings.png" alt="Settings Icon">
-        Open Settings
-      </a>
-      <a class="tool-button" href="intent://com.google.android.gsf.login/#Intent;scheme=android-app;end">
+        Settings
+        <div class="tool-actions">
+          <a class="btn-launch" href="intent://com.android.settings/#Intent;scheme=android-app;end">Launch</a>
+          <button class="btn-qr" onclick="showQR('settings', '/assets/img/qr/settings.png')">QR</button>
+        </div>
+      </div>
+      <div class="tool-button">
         <img src="/assets/img/icons/gam.png" alt="GAM Icon">
         Google Account Manager
-      </a>
-      <a class="tool-button" href="intent://com.android.chrome/#Intent;scheme=android-app;end">
+        <div class="tool-actions">
+          <a class="btn-launch" href="intent://com.google.android.gsf.login/#Intent;scheme=android-app;end">Launch</a>
+          <button class="btn-qr" onclick="showQR('gam', '/assets/img/qr/gam.png')">QR</button>
+        </div>
+      </div>
+      <div class="tool-button">
         <img src="/assets/img/icons/chrome.png" alt="Chrome Icon">
-        Open Chrome
-      </a>
-      <a class="tool-button" href="intent://com.android.vending/#Intent;scheme=android-app;end">
+        Chrome
+        <div class="tool-actions">
+          <a class="btn-launch" href="intent://com.android.chrome/#Intent;scheme=android-app;end">Launch</a>
+          <button class="btn-qr" onclick="showQR('chrome', '/assets/img/qr/chrome.png')">QR</button>
+        </div>
+      </div>
+      <div class="tool-button">
         <img src="/assets/img/icons/playstore.png" alt="Play Store Icon">
-        Open Play Store
-      </a>
-      <a class="tool-button" href="intent://com.google.android.gm/#Intent;scheme=android-app;end">
+        Play Store
+        <div class="tool-actions">
+          <a class="btn-launch" href="intent://com.android.vending/#Intent;scheme=android-app;end">Launch</a>
+          <button class="btn-qr" onclick="showQR('playstore', '/assets/img/qr/playstore.png')">QR</button>
+        </div>
+      </div>
+      <div class="tool-button">
         <img src="/assets/img/icons/gmail.png" alt="Gmail Icon">
-        Open Gmail
-      </a>
-      <a class="tool-button" href="intent://com.google.android.gms/#Intent;scheme=promote_smartlock_scheme;end">
+        Gmail
+        <div class="tool-actions">
+          <a class="btn-launch" href="intent://com.google.android.gm/#Intent;scheme=android-app;end">Launch</a>
+          <button class="btn-qr" onclick="showQR('gmail', '/assets/img/qr/gmail.png')">QR</button>
+        </div>
+      </div>
+      <div class="tool-button">
         <img src="/assets/img/icons/lock.png" alt="Lock Icon">
         Set Lock Screen
-      </a>
-      <a class="tool-button" href="intent:#Intent;component=com.google.android.documentsui/com.android.documentsui.files.FilesActivity;scheme=android-app;end">
+        <div class="tool-actions">
+          <a class="btn-launch" href="intent://com.google.android.gms/#Intent;scheme=promote_smartlock_scheme;end">Launch</a>
+          <button class="btn-qr" onclick="showQR('lock', '/assets/img/qr/lock.png')">QR</button>
+        </div>
+      </div>
+      <div class="tool-button">
         <img src="/assets/img/icons/files.png" alt="DocumentsUI Icon">
-        Open Android File Explorer
-      </a>
-      <a class="tool-button" href="intent://com.android.browser/#Intent;scheme=android-app;end">
+        Android File Explorer
+        <div class="tool-actions">
+          <a class="btn-launch" href="intent://com.google.android.documentsui/#Intent;scheme=android-app;end">Launch</a>
+          <button class="btn-qr" onclick="showQR('filesqr', '/assets/img/qr/files.png')">QR</button>
+        </div>
+      </div>
+      <div class="tool-button">
         <img src="/assets/img/icons/aosp.png" alt="AOSP Browser Icon">
-        Open AOSP Browser / Mi Browser (China)
-      </a>
-      <a class="tool-button" href="intent://com.android.quickstep/#Intent;scheme=android-app;end">
+        AOSP Browser / Mi Browser (China)
+        <div class="tool-actions">
+          <a class="btn-launch" href="intent://com.android.browser/#Intent;scheme=android-app;end">Launch</a>
+          <button class="btn-qr" onclick="showQR('aosp', '/assets/img/qr/aosp.png')">QR</button>
+        </div>
+      </div>
+      <div class="tool-button">
         <img src="/assets/img/icons/quickstep.png" alt="QuickStep Icon">
-        Open Android Launcher (QuickStep)
-      </a>
-      <a class="tool-button" href="intent://com.android.settings/.accounts.AddAccountsSettings#Intent;scheme=android-app;end">
+        Android Launcher (QuickStep)
+        <div class="tool-actions">
+          <a class="btn-launch" href="intent://com.android.quickstep/#Intent;scheme=android-app;end">Launch</a>
+          <button class="btn-qr" onclick="showQR('quickstep', '/assets/img/qr/quickstep.png')">QR</button>
+        </div>
+      </div>
+      <div class="tool-button">
         <img src="/assets/img/icons/add-account.png" alt="Add Account Icon">
         Add Account
-      </a>
+        <div class="tool-actions">
+          <a class="btn-launch" href="intent://com.android.settings/.accounts.AddAccountsSettings#Intent;scheme=android-app;end">Launch</a>
+          <button class="btn-qr" onclick="showQR('addaccount', '/assets/img/qr/add-account.png')">QR</button>
+        </div>
+      </div>
     </div>
-
     <center><h2>Samsung</h2></center>
     <div class="tool-grid">
-      <a class="tool-button" href="intent://com.sec.android.app.myfiles/#Intent;scheme=android-app;end">
+      <div class="tool-button">
         <img src="/assets/img/icons/samsung-file.png" alt="Samsung File Manager Icon">
-        Open Samsung File Manager
-      </a>
-      <a class="tool-button" href="intent://com.sec.android.app.samsungapps/#Intent;scheme=android-app;end">
+        File Manager
+        <div class="tool-actions">
+          <a class="btn-launch" href="intent://com.sec.android.app.myfiles/#Intent;scheme=android-app;end">Launch</a>
+          <button class="btn-qr" onclick="showQR('samsungfile', '/assets/img/qr/samsung-file.png')">QR</button>
+        </div>
+      </div>
+      <div class="tool-button">
         <img src="/assets/img/icons/galaxy-store.png" alt="Galaxy Store Icon">
-        Open Galaxy Store
-      </a>
-      <a class="tool-button" href="intent://com.sec.android.app.sbrowser/#Intent;scheme=android-app;end">
+        Galaxy Store
+        <div class="tool-actions">
+          <a class="btn-launch" href="intent://com.sec.android.app.samsungapps/#Intent;scheme=android-app;end">Launch</a>
+          <button class="btn-qr" onclick="showQR('galaxystore', '/assets/img/qr/galaxy-store.png')">QR</button>
+        </div>
+      </div>
+      <div class="tool-button">
         <img src="/assets/img/icons/samsung-browser.png" alt="Samsung Browser Icon">
-        Open Samsung Browser
-      </a>
+        Samsung Browser
+        <div class="tool-actions">
+          <a class="btn-launch" href="intent://com.sec.android.app.sbrowser/#Intent;scheme=android-app;end">Launch</a>
+          <button class="btn-qr" onclick="showQR('sbrowser', '/assets/img/qr/samsung-browser.png')">QR</button>
+        </div>
+      </div>
     </div>
 
     <center><h2>Xiaomi</h2></center>
     <div class="tool-grid">
-      <a class="tool-button" href="intent://com.mi.android.globalFileexplorer/#Intent;scheme=android-app;end">
+      <div class="tool-button">
         <img src="/assets/img/icons/mi-file.png" alt="Mi File Manager Icon">
-        Open Mi File Manager
-      </a>
-      <a class="tool-button" href="intent://com.mi.globalbrowser/#Intent;scheme=android-app;end">
-        <img src="/assets/img/icons/mi-browser-global.png" alt="Mi Browser Icon">
-        Open Mi Browser (Global)
-      </a>
-      <a class="tool-button" href="intent:#Intent;component=com.miui.home/com.miui.home.launcher.Launcher;scheme=android-app;end">
+        File Manager
+        <div class="tool-actions">
+          <a class="btn-launch" href="intent://com.mi.android.globalFileexplorer/#Intent;scheme=android-app;end">Launch</a>
+          <button class="btn-qr" onclick="showQR('mifile', '/assets/img/qr/mi-file.png')">QR</button>
+        </div>
+      </div>
+      <div class="tool-button">
+        <img src="/assets/img/icons/mi-browser-global.png" alt="Mi Browser Global Icon">
+        Mi Browser (Global)
+        <div class="tool-actions">
+          <a class="btn-launch" href="intent://com.mi.globalbrowser/#Intent;scheme=android-app;end">Launch</a>
+          <button class="btn-qr" onclick="showQR('mibrowser', '/assets/img/qr/mi-browser-global.png')">QR</button>
+        </div>
+      </div>
+      <div class="tool-button">
         <img src="/assets/img/icons/mi-launcher.png" alt="Mi Launcher Icon">
-        Open Mi Launcher
-      </a>
+        Mi Launcher
+        <div class="tool-actions">
+          <a class="btn-launch" href="intent:#Intent;component=com.miui.home/com.miui.home.launcher.Launcher;scheme=android-app;end">Launch</a>
+          <button class="btn-qr" onclick="showQR('milqr', '/assets/img/qr/mi-launcher.png')">QR</button>
+        </div>
+      </div>
     </div>
   </main>
 </body>
