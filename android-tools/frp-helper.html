@@ -126,7 +126,7 @@
   </header>
 
   <main class="tool-container">
-    <p>Tap any of the actions below to launch them in Android. These use intent URLs and are compatible with most Android FRP scenarios.</p>
+    <p>Tap any of the actions below to launch them in Android. Some activities may be blocked by your browser, distinguish them by looking for the ⚠️ icon. </p>
 
     <center><h2>Universal</h2></center>
     <div class="tool-grid">
@@ -182,7 +182,7 @@
         <img src="/assets/img/icons/files.png" alt="DocumentsUI Icon">
         Android File Explorer(⚠️)
         <div class="tool-actions">
-          <a class="btn-launch" href="intent://com.google.android.documentsui/#Intent;scheme=android-app;end">Launch</a>
+          <a class="btn-launch" href="intent://#Intent;component=com.google.android.documentsui/com.android.documentsui.files.FilesActivity;scheme=android-app;end">Launch</a>
           <button class="btn-qr" onclick="showQR('filesqr', '/assets/img/qr/files.png')">QR</button>
         </div>
       </div>
@@ -284,19 +284,27 @@
         </div>
       </div>
       <div class="tool-button">
-        <img src="/assets/img/icons/mi-browser-global.png" alt="Mi Browser Global Icon">
-        Mi Browser (Global)
+        <img src="/assets/img/icons/mi-launcher.png" alt="Mi Launcher ⚠️ Icon">
+        Mi Launcher ⚠️
         <div class="tool-actions">
-          <a class="btn-launch" href="intent://com.mi.globalbrowser/#Intent;scheme=android-app;end">Launch</a>
-          <button class="btn-qr" onclick="showQR('mibrowser', '/assets/img/qr/mi-browser-global.png')">QR</button>
+          <a class="btn-launch" href="intent://com.mi.home/#Intent;scheme=android-app;end">Launch</a>
+          <button class="btn-qr" onclick="showQR('mi-launcher.png', '/assets/img/qr/mi-launcher.png')">QR</button>
         </div>
       </div>
       <div class="tool-button">
-        <img src="/assets/img/icons/mi-launcher.png" alt="Mi Launcher Icon">
-        Mi Launcher(⚠️)
+        <img src="/assets/img/icons/mi-browser.png" alt="Mi Browser Global Icon">
+        Mi Browser (Global)
         <div class="tool-actions">
-          <a class="btn-launch" href="intent:#Intent;component=com.miui.home/com.miui.home.launcher.Launcher;scheme=android-app;end">Launch</a>
-          <button class="btn-qr" onclick="showQR('milqr', '/assets/img/qr/mi-launcher.png')">QR</button>
+          <a class="btn-launch" href="intent://com.mi.globalbrowser/#Intent;scheme=android-app;end">Launch</a>
+          <button class="btn-qr" onclick="showQR('mibrowser', '/assets/img/qr/mi-browser.png')">QR</button>
+        </div>
+      </div>
+      <div class="tool-button">
+        <img src="/assets/img/icons/activity-picker.png" alt="Activity Picker Icon">
+        Activity Picker(⚠️)
+        <div class="tool-actions">
+          <a class="btn-launch" href="intent:#Intent;component=com.android.settings/com.android.settings.ActivityPicker;scheme=android-app;end">Launch</a>
+          <button class="btn-qr" onclick="showQR('activitypickerqr', '/assets/img/qr/activity-picker.png')">QR</button>
         </div>
       </div>
       <div class="tool-button">
@@ -312,11 +320,26 @@
         <img src="/assets/img/icons/appvaultchina.png" alt="App Vault (China) Icon">
         App Vault (China)(⚠️)
         <div class="tool-actions">
-          <a class="btn-launch" href="intent:#Intent;component=com.miui.personalassistant/com.miui.personalassistant.picker.business.home.pages.PickerHomeActivity;scheme=android-app;end">Launch</a>
+          <a class="btn-launch" href="intent:#Intent;component=com.mi.personalassistant/com.miui.personalassistant.picker.business.home.pages.PickerHomeActivity;scheme=android-app;end">Launch</a>
           <button class="btn-qr" onclick="showQR('appvaultchina.png', '/assets/img/qr/appvaultchina.png')">QR</button>
         </div>
       </div>
     </div>
+    <center><h2>Third Party Apps</h2></center>
+    <center><p>All third party software along with their trademarks belong to their respective owners. These website uses official download links and is simply a redirector.</p></center>
+    <div class="tool-grid">
+      <div class="tool-button">
+        <img src="/assets/img/icons/activity-manager.png" alt="Activity Manager Icon">
+        Activity Manager
+        <div class="tool-actions">
+          <a class="btn-launch" href="intent://com.activitymanager/#Intent;scheme=android-app;end">Launch</a>
+          <button class="btn-qr" onclick="showQR('activitymanagerqr', '/assets/img/qr/activity-manager.png')">QR</button>
+          <a class="btn-download" href="https://f-droid.org/repo/com.activitymanager_553.apk" target="_blank">Download</a>
+        </div>
+      </div>
+      
+    </div>
+
   </main>
 </body>
 </html>

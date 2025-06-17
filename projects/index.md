@@ -3,5 +3,10 @@ layout: default
 title: Projects
 ---
 
-<h2>Projects Section</h2>
-<p>This page will contain useful resources related to projects.</p>
+<div class="dashboard">
+  <a class="card" href="/projects/unsuper.html">
+    <h2>unsuper</h2>
+    <p>The fastest Android super.img dumper, written in Python.</p>
+  </a>
+
+</div>

@@ -58,6 +58,17 @@ button:hover, .btn:hover {
   background-color: #c54bbb;
 }
 
+.btn-download {
+  background-color: #4099ff;
+  color: #fff;
+  text-decoration: none;
+}
+
+.btn-download:hover {
+  background-color: #1c7ed6;
+}
+
+
 @media (max-width: 600px) {
   header h1 {
     font-size: 1.5rem;
@@ -67,7 +78,8 @@ button:hover, .btn:hover {
 main > p,
 main > h1,
 main > h2,
-main > h3 {
+main > h3,
+main > #readme {
   padding: 0 1.5rem;
 }
 
