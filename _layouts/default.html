@@ -7,6 +7,10 @@
   <link rel="icon" href="/assets/img/site/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/assets/css/style.css">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@760&display=swap" rel="stylesheet">
+
   <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="fl0w" data-description="Support me on Buy me a coffee!" data-message="" data-color="#ff8ff5" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
 </head>
 <body>
@@ -30,11 +34,31 @@
   {% endunless %}
 
   <header>
-    <h1>{{ page.title }}</h1>
+    <h1 id="animated-title" data-title="{{ page.title }}"></h1>
   </header>
 
   <main>
     {{ content }}
   </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const h1 = document.getElementById("animated-title");
+      const fullTitle = h1.getAttribute("data-title") || "";
+      const delay = 80;
+  
+      let i = 0;
+      function typeNext() {
+        if (i <= fullTitle.length) {
+          const partial = fullTitle.slice(0, i);
+          h1.innerHTML = `<span class="bracket">&lt;</span><span class="title-text">${partial}</span><span class="bracket">&gt;</span>`;
+          i++;
+          setTimeout(typeNext, delay);
+        }
+      }
+  
+      typeNext();
+    });
+  </script>
 </body>
 </html>
