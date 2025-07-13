@@ -3,7 +3,6 @@ layout: default
 title: Android Tools
 ---
 
-<h2 style="margin-bottom: 1rem;">Android Tools</h2>
 
 <div class="dashboard">
   <a class="card" href="/android-tools/frp-helper.html">
