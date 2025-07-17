@@ -34,6 +34,10 @@ div.dashboard {
   padding: 2rem;
 }
 
+.dashboard + .dashboard {
+  margin-top: -2.5rem; 
+}
+
 a.card {
   background: #1b223a;
   border: 1px solid #222f4b;
@@ -94,6 +98,7 @@ main > h3,
 main > #readme {
   padding: 0 1.5rem;
 }
+
 
 /* === MOBILE RESPONSIVENESS === */
 @media (max-width: 600px) {
