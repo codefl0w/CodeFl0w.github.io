@@ -34,6 +34,7 @@ div.dashboard {
   padding: 2rem;
 }
 
+/* Space between columns */
 .dashboard + .dashboard {
   margin-top: -2.5rem; 
 }
