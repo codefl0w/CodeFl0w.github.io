@@ -3,6 +3,7 @@ layout: default
 title: fl0w's Archive
 ---
 
+<!-- Row 1 -->
 <div class="dashboard">
   <a class="card" href="/android-tools">
     <h2>🔧 Android Tools</h2>
@@ -20,4 +21,12 @@ title: fl0w's Archive
     <h2>📌 Downloads</h2>
     <p>Tool dumps, flashables, and firmware images.</p>
   </a>
+</div>
+
+<!-- Row 2 -->
+<div class="dashboard">
+  <a class="card" href="/web-tools">
+    <h2>🌐 Web Tools</h2>
+    <p>Web tools to handle simple tasks.</p>
+  </a> 
 </div>
