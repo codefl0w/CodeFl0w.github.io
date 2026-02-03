@@ -1,0 +1,318 @@
+/* === BASE STYLES === */
+:root {
+    --bg-dark: #151c2c;
+    --card-bg: #1b223a;
+    --card-border: #222f4b;
+    --text-main: #e0e0e0;
+    --text-muted: #a0a0a0;
+    --accent-pink: #ff8ff5;
+    --accent-hover: #c54bbb;
+    --accent-blue: #4099ff;
+    --font-main: system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-main);
+    margin: 0;
+    background: var(--bg-dark);
+    color: var(--text-main);
+    line-height: 1.5;
+}
+
+/* === HEADER === */
+header {
+    background: var(--card-bg);
+    color: var(--accent-pink);
+    padding: 1rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--card-border);
+}
+
+header h1 {
+    font-family: 'Open Sans', sans-serif;
+    /* Fallback if not loaded */
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+header p {
+    color: var(--text-muted);
+}
+
+/* === LAYOUT === */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem 3rem;
+}
+
+.grid-layout {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 2rem;
+}
+
+@media (max-width: 768px) {
+    .grid-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* === CARDS / PANELS === */
+/* Replaces .glass-panel to match user's a.card style */
+.glass-panel,
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px #404f7a;
+    transition: all 0.2s ease;
+    margin-bottom: 1rem;
+}
+
+.glass-panel h2 {
+    color: var(--text-main);
+    border-bottom: 1px solid var(--card-border);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.glass-panel h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: var(--text-main);
+    margin-top: 1.5rem;
+}
+
+/* === LINKS === */
+a {
+    color: var(--accent-pink);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* === BUTTONS === */
+button,
+.btn {
+    background-color: var(--accent-pink);
+    color: #121212;
+    border: none;
+    padding: 0.5em 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+    display: inline-block;
+    text-decoration: none;
+}
+
+button:hover,
+.btn:hover {
+    background-color: var(--accent-hover);
+    text-decoration: none;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    border: 1px solid var(--accent-pink);
+    color: var(--accent-pink);
+    width: 100%;
+}
+
+.btn-secondary:hover {
+    background-color: rgba(255, 143, 245, 0.1);
+}
+
+.btn-outline {
+    background-color: transparent;
+    border: 1px solid var(--card-border);
+    color: var(--text-main);
+}
+
+.btn-outline:hover {
+    border-color: var(--accent-pink);
+    color: var(--accent-pink);
+    background-color: transparent;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+/* === FORMS === */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+input[type="text"],
+input[type="number"],
+textarea,
+select {
+    width: 100%;
+    padding: 0.75rem;
+    background: #121826;
+    /* Slightly darker than card */
+    border: 1px solid var(--card-border);
+    border-radius: 5px;
+    color: var(--text-main);
+    font-family: var(--font-main);
+    font-size: 1rem;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--accent-pink);
+    box-shadow: 0 0 0 2px rgba(255, 143, 245, 0.2);
+}
+
+.hint {
+    display: block;
+    margin-top: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.hidden {
+    display: none;
+}
+
+/* Radio Cards */
+.radio-group {
+    display: flex;
+    gap: 1rem;
+}
+
+.radio-card {
+    flex: 1;
+    position: relative;
+    cursor: pointer;
+}
+
+.radio-card input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.radio-card span {
+    display: block;
+    padding: 0.75rem;
+    text-align: center;
+    background: #121826;
+    border: 1px solid var(--card-border);
+    border-radius: 5px;
+    transition: all 0.2s;
+}
+
+.radio-card input:checked+span {
+    border-color: var(--accent-pink);
+    color: var(--accent-pink);
+    background: rgba(255, 143, 245, 0.05);
+}
+
+/* Artifact Items */
+.artifact-item {
+    background: #121826;
+    border: 1px solid var(--card-border);
+    border-radius: 5px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.remove-artifact {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: none;
+    border: none;
+    color: #ff6b6b;
+    padding: 0;
+    font-size: 1.2rem;
+}
+
+.remove-artifact:hover {
+    background: none;
+    color: #ff4d4d;
+}
+
+/* Previews */
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.svg-container {
+    background: #0d1117;
+    /* Always dark for preview contrast */
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 150px;
+    overflow: auto;
+}
+
+.svg-container.loading {
+    opacity: 0.5;
+}
+
+pre {
+    background: #0d1117;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--card-border);
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+}
+
+code {
+    font-family: var(--font-mono);
+    color: var(--accent-blue);
+    font-size: 0.9rem;
+}
+
+.instructions ol {
+    margin-left: 1.5rem;
+    color: var(--text-muted);
+}
+
+.instructions li {
+    margin-bottom: 0.5rem;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    header h1 {
+        font-size: 1.5rem;
+    }
+}

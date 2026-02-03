@@ -1,0 +1,126 @@
+---
+layout: default
+title: gh-boards Generator
+---
+
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+
+<div class="background-glow"></div>
+
+<div class="container">
+
+
+    <div class="grid-layout">
+        <!-- Configuration Form -->
+        <section class="config-panel glass-panel">
+            <h2>1. User & Defaults</h2>
+            <div class="form-group">
+                <label for="username">GitHub Username</label>
+                <input type="text" id="username" placeholder="e.g. torvalds" spellcheck="false">
+            </div>
+
+            <div class="form-group">
+                <label>Theme</label>
+                <div class="radio-group">
+                    <label class="radio-card">
+                        <input type="radio" name="theme" value="dark" checked>
+                        <span>Dark</span>
+                    </label>
+                    <label class="radio-card">
+                        <input type="radio" name="theme" value="light">
+                        <span>Light</span>
+                    </label>
+                </div>
+            </div>
+
+            <h2>2. Repository Selection</h2>
+            <div class="form-group">
+                <label>Method</label>
+                <div class="radio-group">
+                    <label class="radio-card">
+                        <input type="radio" name="select_method" value="top_stars" checked>
+                        <span>Top Stars</span>
+                    </label>
+                    <label class="radio-card">
+                        <input type="radio" name="select_method" value="manual">
+                        <span>Manual List</span>
+                    </label>
+                </div>
+                <small class="hint">How should we find your repositories?</small>
+            </div>
+
+            <div class="form-group" id="limit-group">
+                <label for="limit">Fetch Limit</label>
+                <input type="number" id="limit" value="20" min="1" max="100">
+            </div>
+
+            <div class="form-group hidden" id="manual-repos-group">
+                <label for="manual-repos">Repository Names</label>
+                <textarea id="manual-repos" placeholder="repo-a, repo-b, repo-c"></textarea>
+                <small class="hint">Comma separated list of repositories</small>
+            </div>
+
+            <h2>3. Artifacts</h2>
+            <div class="artifacts-list" id="artifacts-list">
+                <!-- Dynamic artifacts will appear here -->
+            </div>
+            <button class="btn btn-secondary" id="add-artifact-btn">+ Add Artifact</button>
+        </section>
+
+        <!-- Preview Panel -->
+        <section class="preview-panel glass-panel">
+            <div class="preview-header">
+                <h2>Live Preview</h2>
+                <div class="actions">
+                    <button class="btn btn-primary" id="add-rotation-btn" style="background: #2ea44f;">Add to Hourly
+                        Updates</button>
+                </div>
+            </div>
+
+            <div class="direct-link-container"
+                style="margin-bottom: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                <label
+                    style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 0.5rem;">Direct
+                    Link (for README)</label>
+                <div style="display: flex; gap: 0.5rem;">
+                    <input type="text" id="direct-link-input" readonly
+                        style="flex: 1; padding: 0.5rem; border-radius: 4px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3); color: var(--text-main); font-family: monospace;">
+                    <button class="btn btn-outline" id="copy-link-btn">Copy</button>
+                </div>
+            </div>
+
+
+            <div class="svg-container" id="svg-visual-preview">
+                <!-- SVG will be injected here -->
+                <div class="placeholder-text">Preview will appear here</div>
+            </div>
+
+            <h3>Manifest JSON</h3>
+            <div style="position: relative;">
+                <pre><code id="json-preview" class="language-json">...</code></pre>
+                <div class="actions" style="position: absolute; top: 10px; right: 10px;">
+                    <button class="btn btn-sm btn-outline" id="copy-json-btn">Copy</button>
+                    <button class="btn btn-sm btn-outline" id="download-btn">Download</button>
+                </div>
+            </div>
+
+            <div class="instructions">
+                <h3>How it works</h3>
+                <ol>
+                    <li><strong>Instant:</strong> Use the "Direct Link" above for immediate results (powered by
+                        Vercel).</li>
+                    <li><strong>Hourly:</strong> Click "Add to Hourly Updates" to let our GitHub Bot manage a
+                        persistent, high-performance copy in the repo.</li>
+                </ol>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+<script src="app.js"></script>
