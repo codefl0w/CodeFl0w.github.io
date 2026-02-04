@@ -1,0 +1,70 @@
+---
+layout: default
+title: Ares-Backlight-Changer
+---
+
+<main class="tool-container">
+    <p><strong>Ares-Backlight-Changer</strong> is a tool to change backlight colors for Redmi K40 Gaming [ARES/ARESIN].
+        Below is its live project description, fetched from GitHub:</p>
+
+    <!-- Toggle Button -->
+    <div id="readme-toggle" onclick="toggleReadme()"
+        style="cursor: pointer; display: flex; align-items: center; gap: 0.4rem; padding: 0 1.5rem;">
+        <span id="readme-arrow" style="transition: transform 0.2s;">▶</span>
+        <strong style="user-select: none;">Show README</strong>
+    </div>
+
+    <!-- Collapsible README -->
+    <section id="readme-wrapper" style="display: none;">
+        <div id="readme" style="padding: 0 1.5rem;">Loading README.md...</div>
+    </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+    // Fetch the README once
+    let readmeLoaded = false;
+    function toggleReadme() {
+        const wrapper = document.getElementById("readme-wrapper");
+        const arrow = document.getElementById("readme-arrow");
+        const label = document.querySelector("#readme-toggle strong");
+
+        const isHidden = wrapper.style.display === "none";
+        wrapper.style.display = isHidden ? "block" : "none";
+        arrow.style.transform = isHidden ? "rotate(90deg)" : "rotate(0deg)";
+        label.textContent = isHidden ? "Hide README" : "Show README";
+
+        if (!readmeLoaded && isHidden) {
+            fetch("https://raw.githubusercontent.com/codefl0w/Ares-Backlight-Changer/main/README.md")
+                .then(res => {
+                    if (!res.ok) throw new Error("Not found");
+                    return res.text();
+                })
+                .then(md => {
+                    document.getElementById('readme').innerHTML = marked.parse(md);
+                    readmeLoaded = true;
+                })
+                .catch(() => {
+                    // Fallback to master
+                    fetch("https://raw.githubusercontent.com/codefl0w/Ares-Backlight-Changer/master/README.md")
+                        .then(res => res.text())
+                        .then(md => {
+                            document.getElementById('readme').innerHTML = marked.parse(md);
+                            readmeLoaded = true;
+                        })
+                        .catch(() => {
+                            document.getElementById('readme').textContent = "Failed to load README. Please refresh the page and try again.";
+                        });
+                });
+        }
+    }
+</script>
+
+<br>
+<p>Source code and documentation can be found on Ares-Backlight-Changer's GitHub repository.</p>
+<br>
+<div style="padding: 0 1.5rem; margin: 1rem 0;">
+    <a href="https://github.com/codefl0w/Ares-Backlight-Changer/releases" target="_blank" class="btn">
+        See all releases on GitHub
+    </a>
+</div>

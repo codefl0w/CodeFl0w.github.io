@@ -1,10 +1,10 @@
 ---
 layout: default
-title: unsuper
+title: gh-boards
 ---
 
 <main class="tool-container">
-    <p><strong>unsuper</strong> is the fastest Android super.img dumper ever, written in Python. Below is its live project description, fetched from GitHub:</p>
+    <p><strong>gh-boards</strong> is a tool to generate simple and elegant GitHub stat badges and boards for your profile or repository. Below is its live project description, fetched from GitHub:</p>
   
   <!-- Toggle Button -->
   <div id="readme-toggle" onclick="toggleReadme()" style="cursor: pointer; display: flex; align-items: center; gap: 0.4rem; padding: 0 1.5rem;">
@@ -33,25 +33,36 @@ title: unsuper
     label.textContent = isHidden ? "Hide README" : "Show README";
 
     if (!readmeLoaded && isHidden) {
-      fetch("https://raw.githubusercontent.com/codefl0w/unsuper/main/README.md")
-        .then(res => res.text())
+      fetch("https://raw.githubusercontent.com/codefl0w/gh-boards/main/README.md")
+        .then(res => {
+            if (!res.ok) throw new Error("Not found");
+            return res.text();
+        })
         .then(md => {
           document.getElementById('readme').innerHTML = marked.parse(md);
           readmeLoaded = true;
         })
         .catch(() => {
-          document.getElementById('readme').textContent = "Failed to load README. Please refresh the page and try again.";
+             // Fallback to master
+             fetch("https://raw.githubusercontent.com/codefl0w/gh-boards/master/README.md")
+             .then(res => res.text())
+             .then(md => {
+                  document.getElementById('readme').innerHTML = marked.parse(md);
+                  readmeLoaded = true;
+             })
+             .catch(() => {
+                document.getElementById('readme').textContent = "Failed to load README. Please refresh the page and try again.";
+             });
         });
     }
   }
 </script>
 
 <br>
-<p>Source code and all executable binaries can be found on unsuper's GitHub repository. unsuper can also be installed as a global variable using pip, see the README above.</p>
-<img src="/assets/img/showcase/unsuper-output.png" style="max-width:800px; border-radius:10px; padding: 0 1.5rem; margin: 1rem 0;">
+<p>Source code and documentation can be found on gh-boards' GitHub repository.</p>
 <br>
 <div style="padding: 0 1.5rem; margin: 1rem 0;">
-    <a href="https://github.com/codefl0w/unsuper/releases" target="_blank" class="btn">
+    <a href="https://github.com/codefl0w/gh-boards/releases" target="_blank" class="btn">
       See all releases on GitHub
     </a>
-  </div>
+</div>
