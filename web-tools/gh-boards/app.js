@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
         selectMethod: 'top_stars',
         limit: 20,
         manualRepos: '',
-        artifacts: [createDefaultArtifact()] // Artifacts no longer store 'id' directly from user input
+        artifacts: [createDefaultArtifact()] 
     };
 
     // --- DOM Elements ---
@@ -31,10 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- Configuration ---
-
-        const API_BASE_URL = 'https://gh-boards.vercel.app'; 
-        ? 'http://localhost:3000' 
-        : 'https://gh-boards.vercel.app'; 
+    // TODO: Replace with your actual Vercel App URL
+    const API_BASE_URL = 'https://gh-boards.vercel.app';
 
     // --- Constants ---
     const VALID_TYPES = [
