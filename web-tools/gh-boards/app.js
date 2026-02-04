@@ -31,8 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- Configuration ---
-    // TODO: Replace with your actual Vercel App URL
-    const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+
+        const API_BASE_URL = 'https://gh-boards.vercel.app'; 
         ? 'http://localhost:3000' 
         : 'https://gh-boards.vercel.app'; 
 
