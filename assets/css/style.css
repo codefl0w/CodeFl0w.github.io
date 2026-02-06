@@ -197,17 +197,17 @@ main > #readme {
   gap: 0.55rem;
   padding: 0.6rem 0.95rem;
   border-radius: 999px;
-  background: #1b223a;
-  border: 1px solid #222f4b;
+  background: #192036;
+  border: 1px solid #ff8ff5;
   color: #e0e0e0;
   text-decoration: none;
-  box-shadow: 0 2px 6px #404f7a;
+  box-shadow: 0 2px 6px #664f64;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .pill:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px #404f7a;
+  box-shadow: 0 4px 12px #ff8ff5;
   text-decoration: none;
 }
 
