@@ -1,0 +1,248 @@
+---
+layout: default
+title: Text Formatter
+---
+
+
+
+<main class="tool-container">
+
+    <textarea id="editor" placeholder="Type or paste your text here..." oninput="updateStats()"></textarea>
+
+    <div class="stats-bar">
+        <span id="char-count">Characters: <strong>0</strong></span>
+        <span id="word-count">Words: <strong>0</strong></span>
+        <span id="line-count">Lines: <strong>0</strong></span>
+    </div>
+
+    <div class="controls-area">
+
+        <!-- Row 1: Advanced Tools (Replace, Add, Trim) -->
+        <div class="control-section">
+
+            <div class="control-row">
+                <button class="control-btn accent" onclick="replaceText()">Replace</button>
+                <input type="text" id="replace-from" class="input-dark" placeholder="Find..." style="width: 100px;">
+                <span>with</span>
+                <input type="text" id="replace-to" class="input-dark" placeholder="Replace..." style="width: 100px;">
+                <label><input type="checkbox" id="replace-cs"> Case sensitive</label>
+            </div>
+
+            <div class="control-row">
+                <button class="control-btn accent" onclick="addText()">Add</button>
+                <input type="text" id="add-text" class="input-dark" placeholder="Text to add..." style="width: 150px;">
+                <span>to the</span>
+                <select id="add-pos">
+                    <option value="start">start</option>
+                    <option value="end">end</option>
+                </select>
+                <span>of each line.</span>
+            </div>
+
+            <div class="control-row">
+                <button class="control-btn accent" onclick="trimText()">Trim</button>
+                <select id="trim-pos">
+                    <option value="first">first</option>
+                    <option value="last">last</option>
+                </select>
+                <select id="trim-num">
+                    <!-- Javascript will populate this, but hardcoding reasonable values -->
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                </select>
+                <span>characters of each line.</span>
+            </div>
+
+        </div>
+
+        <!-- Row 2: Basic Formatters -->
+        <div class="control-section">
+            <button class="control-btn" onclick="format('upper')">UPPERCASE</button>
+            <button class="control-btn" onclick="format('lower')">lowercase</button>
+            <button class="control-btn" onclick="format('title')">Title Case</button>
+            <button class="control-btn" onclick="format('sentence')">Sentence case</button>
+            <button class="control-btn" onclick="format('inverse')">iNVERSE cASE</button>
+            <button class="control-btn" onclick="format('reverse')">Reverse Text</button>
+        </div>
+
+        <!-- Row 3: Line Operations -->
+        <div class="control-section">
+            <button class="control-btn" onclick="format('trim')">Trim Whitespace</button>
+            <button class="control-btn" onclick="format('remove-extra-space')">Remove Extra Spaces</button>
+            <button class="control-btn" onclick="format('sort-az')">Sort Lines (A-Z)</button>
+            <button class="control-btn" onclick="format('sort-za')">Sort Lines (Z-A)</button>
+            <button class="control-btn" onclick="format('unique')">Remove Duplicates</button>
+            <button class="control-btn" onclick="format('remove-empty')">Remove Empty Lines</button>
+        </div>
+
+        <!-- Row 4: Actions -->
+        <div class="control-section" style="border: none;">
+            <button class="control-btn" onclick="copyText()"
+                style="background-color: #4099ff; border-color: #4099ff; color: white;">Copy to Clipboard</button>
+            <button class="control-btn" onclick="clearText()"
+                style="background-color: #c92a2a; border-color: #c92a2a; color: white;">Clear</button>
+        </div>
+
+    </div>
+
+</main>
+
+<script>
+    const editor = document.getElementById('editor');
+
+    function updateStats() {
+        const text = editor.value;
+        const chars = text.length;
+        const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+        const lines = text === '' ? 0 : text.split(/\n/).length;
+
+        document.getElementById('char-count').innerHTML = `Characters: <strong>${chars}</strong>`;
+        document.getElementById('word-count').innerHTML = `Words: <strong>${words}</strong>`;
+        document.getElementById('line-count').innerHTML = `Lines: <strong>${lines}</strong>`;
+    }
+
+    // --- Advanced Tools ---
+
+    function replaceText() {
+        const from = document.getElementById('replace-from').value;
+        const to = document.getElementById('replace-to').value;
+        const cs = document.getElementById('replace-cs').checked;
+
+        if (!from) return;
+
+        let text = editor.value;
+
+        // Escape regex characters to treat as literal string
+        const escapeRegExp = (string) => string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+        const flags = cs ? 'g' : 'gi';
+        const regex = new RegExp(escapeRegExp(from), flags);
+
+        editor.value = text.replace(regex, to);
+        updateStats();
+    }
+
+    function addText() {
+        const add = document.getElementById('add-text').value;
+        const pos = document.getElementById('add-pos').value;
+
+        if (!add) return;
+
+        let lines = editor.value.split('\n');
+
+        lines = lines.map(line => {
+            if (pos === 'start') {
+                return add + line;
+            } else {
+                return line + add;
+            }
+        });
+
+        editor.value = lines.join('\n');
+        updateStats();
+    }
+
+    function trimText() {
+        const pos = document.getElementById('trim-pos').value;
+        const num = parseInt(document.getElementById('trim-num').value);
+
+        let lines = editor.value.split('\n');
+
+        lines = lines.map(line => {
+            if (line.length <= num) return ''; // Option: return empty string if trim > length
+
+            if (pos === 'first') {
+                return line.substring(num);
+            } else {
+                return line.substring(0, line.length - num);
+            }
+        });
+
+        editor.value = lines.join('\n');
+        updateStats();
+    }
+
+
+    // --- Basic Formatting ---
+
+    function format(type) {
+        let text = editor.value;
+
+        switch (type) {
+            case 'upper':
+                text = text.toUpperCase();
+                break;
+            case 'lower':
+                text = text.toLowerCase();
+                break;
+            case 'title':
+                text = text.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+                break;
+            case 'sentence':
+                text = text.toLowerCase().replace(/(^\s*\w|[\.\!\?]\s*\w)/g, (c) => c.toUpperCase());
+                break;
+            case 'inverse':
+                text = text.split('').map(c => c === c.toUpperCase() ? c.toLowerCase() : c.toUpperCase()).join('');
+                break;
+            case 'trim':
+                text = text.trim().split('\n').map(l => l.trim()).join('\n');
+                break;
+            case 'remove-extra-space':
+                text = text.replace(/\s+/g, ' ').trim();
+                break;
+            case 'reverse':
+                text = text.split('').reverse().join('');
+                break;
+            case 'sort-az':
+                text = text.split('\n').sort().join('\n');
+                break;
+            case 'sort-za':
+                text = text.split('\n').sort().reverse().join('\n');
+                break;
+            case 'unique':
+                text = [...new Set(text.split('\n'))].join('\n');
+                break;
+            case 'remove-empty':
+                text = text.split('\n').filter(line => line.trim() !== '').join('\n');
+                break;
+        }
+
+        editor.value = text;
+        updateStats();
+    }
+
+    function copyText() {
+        editor.select();
+        document.execCommand('copy');
+        window.getSelection().removeAllRanges();
+        alert('Copied to clipboard!');
+    }
+
+    function clearText() {
+        if (confirm('Are you sure you want to clear all text?')) {
+            editor.value = '';
+            updateStats();
+        }
+    }
+
+    // Initial stats update
+    updateStats();
+</script>

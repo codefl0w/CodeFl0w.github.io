@@ -4,10 +4,12 @@ title: gh-boards
 ---
 
 <main class="tool-container">
-    <p><strong>gh-boards</strong> is a tool to generate simple and elegant GitHub stat badges and boards for your profile or repository. Below is its live project description, fetched from GitHub:</p>
-  
+  <p><strong>gh-boards</strong> is a tool to generate simple and elegant GitHub stat badges and boards for your profile
+    or repository. Below is its live project description, fetched from GitHub:</p>
+
   <!-- Toggle Button -->
-  <div id="readme-toggle" onclick="toggleReadme()" style="cursor: pointer; display: flex; align-items: center; gap: 0.4rem; padding: 0 1.5rem;">
+  <div id="readme-toggle" onclick="toggleReadme()"
+    style="cursor: pointer; display: flex; align-items: center; gap: 0.4rem; padding: 0 1.5rem;">
     <span id="readme-arrow" style="transition: transform 0.2s;">▶</span>
     <strong style="user-select: none;">Show README</strong>
   </div>
@@ -35,24 +37,24 @@ title: gh-boards
     if (!readmeLoaded && isHidden) {
       fetch("https://raw.githubusercontent.com/codefl0w/gh-boards/main/README.md")
         .then(res => {
-            if (!res.ok) throw new Error("Not found");
-            return res.text();
+          if (!res.ok) throw new Error("Not found");
+          return res.text();
         })
         .then(md => {
           document.getElementById('readme').innerHTML = marked.parse(md);
           readmeLoaded = true;
         })
         .catch(() => {
-             // Fallback to master
-             fetch("https://raw.githubusercontent.com/codefl0w/gh-boards/master/README.md")
-             .then(res => res.text())
-             .then(md => {
-                  document.getElementById('readme').innerHTML = marked.parse(md);
-                  readmeLoaded = true;
-             })
-             .catch(() => {
-                document.getElementById('readme').textContent = "Failed to load README. Please refresh the page and try again.";
-             });
+          // Fallback to master
+          fetch("https://raw.githubusercontent.com/codefl0w/gh-boards/master/README.md")
+            .then(res => res.text())
+            .then(md => {
+              document.getElementById('readme').innerHTML = marked.parse(md);
+              readmeLoaded = true;
+            })
+            .catch(() => {
+              document.getElementById('readme').textContent = "Failed to load README. Please refresh the page and try again.";
+            });
         });
     }
   }
@@ -60,9 +62,12 @@ title: gh-boards
 
 <br>
 <p>Source code and documentation can be found on gh-boards' GitHub repository.</p>
-<br>
-<div style="padding: 0 1.5rem; margin: 1rem 0;">
-    <a href="https://github.com/codefl0w/gh-boards/releases" target="_blank" class="btn">
-      See all releases on GitHub
-    </a>
+
+<div style="padding: 0 1.5rem; margin: 1rem 0; display: flex; gap: 1rem; flex-wrap: wrap;">
+  <a href="https://github.com/codefl0w/gh-boards" target="_blank" class="btn">
+    View on GitHub
+  </a>
+  <a href="/archive/web-tools/gh-boards" target="_blank" class="btn">
+    Try gh-boards live
+  </a>
 </div>
