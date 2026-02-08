@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
         selectMethod: 'top_stars',
         limit: 20,
         manualRepos: '',
-        artifacts: [createDefaultArtifact()]
+        artifacts: [createDefaultArtifact()] // Artifacts no longer store 'id' directly from user input
     };
 
     // --- DOM Elements ---
@@ -257,6 +257,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: state.selectMethod
             },
             artifacts: safeArtifacts,
+            cache: {
+                repos_etag: null,
+                last_checked: null
+            },
             meta: {
                 requested_by: "web-ui",
                 requested_at: now
