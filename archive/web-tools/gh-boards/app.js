@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
         selectMethod: 'top_stars',
         limit: 20,
         manualRepos: '',
-        artifacts: [createDefaultArtifact()] 
+        artifacts: [createDefaultArtifact()]
     };
 
     // --- DOM Elements ---
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- Configuration ---
-    // TODO: Replace with your actual Vercel App URL
+
     const API_BASE_URL = 'https://gh-boards.vercel.app';
 
     // --- Constants ---
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (ui.copyBtn) ui.copyBtn.addEventListener('click', copyToClipboard);
         if (ui.downloadBtn) ui.downloadBtn.addEventListener('click', downloadJson);
-        
+
         if (ui.copyLinkBtn) {
             ui.copyLinkBtn.addEventListener('click', () => {
                 const text = ui.directLinkInput.value;
@@ -210,43 +210,63 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Output Generator ---
     function generateManifest() {
-        // Auto-generate IDs
+        const username = state.username || "YOUR_USERNAME";
+        const now = new Date().toISOString();
+
+        // Map type to style (renderer name)
+        const typeToStyle = {
+            'board': 'board_stars_downloads'
+        };
+
+        // Auto-generate IDs and build artifact objects
         const uniqueIds = {};
         const safeArtifacts = state.artifacts.map(art => {
-            // Base ID on type
             let baseId = art.type;
             if (!uniqueIds[baseId]) uniqueIds[baseId] = 0;
             uniqueIds[baseId]++;
 
             let finalId = baseId;
             if (uniqueIds[baseId] > 1) {
-                finalId = `${baseId}-${uniqueIds[baseId]}`;
+                finalId = `${baseId}_${uniqueIds[baseId]}`;
             }
 
             return {
                 id: finalId,
                 type: art.type,
-                options: { ...art.options }
+                style: typeToStyle[art.type] || art.type,
+                target: "profile",
+                theme: state.theme,
+                options: {
+                    max_repos: art.options.max_repos || 10,
+                    show_stars: art.options.show_stars !== false,
+                    show_downloads: true
+                },
+                status: "active"
             };
         });
 
+        // Build manifest with schema v1
         const manifest = {
-            user: state.username || "YOUR_USERNAME",
+            schema_version: 1,
+            user: username,
+            created_on: now,
             defaults: {
-                theme: state.theme,
-                output_dir: "out"
+                theme: state.theme
             },
             select: {
-                method: state.selectMethod,
-                limit: state.limit
+                method: state.selectMethod
             },
-            artifacts: safeArtifacts
+            artifacts: safeArtifacts,
+            meta: {
+                requested_by: "web-ui",
+                requested_at: now
+            }
         };
 
+        // Handle manual repo selection
         if (state.selectMethod === 'manual') {
             const repoList = state.manualRepos.split(',').map(s => s.trim()).filter(s => s);
             manifest.select.method = 'explicit';
-            delete manifest.select.limit;
             manifest.targets = {
                 repos: repoList
             };
@@ -283,16 +303,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!ui.svgPreview) return;
 
         ui.svgPreview.innerHTML = '';
-        
+
         // 1. Construct Vercel API URL
         const user = state.username || 'preview_user';
         const theme = state.theme;
-        
+
         // Determine params based on first board artifact
         const artifact = manifest.artifacts.find(a => a.type === 'board');
         const showStars = artifact ? (artifact.options.show_stars !== false) : true;
         const maxRepos = artifact ? (artifact.options.max_repos || 10) : 10;
-        
+
         const params = new URLSearchParams({
             user: user,
             theme: theme,
@@ -301,7 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         const apiUrl = `${API_BASE_URL}/api/board?${params.toString()}`;
-        
+
         // 2. Update Direct Link Input
         if (ui.directLinkInput) {
             ui.directLinkInput.value = apiUrl;
@@ -313,9 +333,9 @@ document.addEventListener('DOMContentLoaded', () => {
         img.src = apiUrl;
         img.alt = "Board Preview";
         img.style.maxWidth = "100%";
-        
+
         ui.svgPreview.classList.add('loading');
-        
+
         img.onload = () => {
             ui.svgPreview.classList.remove('loading');
         };
@@ -323,21 +343,21 @@ document.addEventListener('DOMContentLoaded', () => {
             ui.svgPreview.classList.remove('loading');
             ui.svgPreview.innerHTML = '<div style="color:red">Failed to load preview. Ensure API is running.</div>';
         };
-        
+
         ui.svgPreview.appendChild(img);
     }
-    
+
     function openGitHubIssue() {
         const manifest = generateManifest();
         const jsonStr = JSON.stringify(manifest, null, 2);
-        
+
         const title = `Add User [${manifest.user}]`;
         const body = `Please add my user configuration to the daily rotation.\n\n\`\`\`json\n${jsonStr}\n\`\`\``;
-        
+
         // TODO: Replace with your actual repository
-        const repo = 'codefl0w/gh-boards'; 
+        const repo = 'codefl0w/gh-boards';
         const url = `https://github.com/${repo}/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
-        
+
         window.open(url, '_blank');
     }
 
