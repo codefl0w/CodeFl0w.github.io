@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Web Tools
+description: "Lightweight web utilities like frame rate testing and GitHub stat boards."
 ---
 
 

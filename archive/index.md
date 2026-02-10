@@ -1,6 +1,7 @@
 ---
 layout: default
 title: fl0w's Archive
+description: "Central archive of Android tooling, guides, projects, downloads, and web utilities by fl0w."
 ---
 
 <!-- Row 1 -->

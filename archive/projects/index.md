@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Projects
+description: "Open-source projects by fl0w, from QuickADB to gh-boards and super.img tooling."
 ---
 
 <!-- Row 1 -->
