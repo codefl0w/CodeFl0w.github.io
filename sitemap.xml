@@ -1,16 +1,144 @@
----
-layout: none
-permalink: /sitemap.xml
----
-<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  {% assign pages = site.pages | where_exp: "p", "p.sitemap != false" %}
-  {% for page in pages %}
+  
+  
   <url>
-    <loc>{{ site.url | append: page.url }}</loc>
-    <lastmod>{{ page.date | default: site.time | date_to_xmlschema }}</lastmod>
-    <changefreq>{% if page.url == "/" %}weekly{% else %}monthly{% endif %}</changefreq>
-    <priority>{% if page.url == "/" %}1.0{% else %}0.6{% endif %}</priority>
+    <loc>https://codefl0w.xyz/archive/projects/android-file-host-scraper.html</loc>
+    <lastmod>2026-02-11T15:57:30+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
-  {% endfor %}
+  
+  <url>
+    <loc>https://codefl0w.xyz/archive/projects/ares-backlight-changer.html</loc>
+    <lastmod>2026-02-11T15:57:30+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://codefl0w.xyz/archive/web-tools/fps.html</loc>
+    <lastmod>2026-02-11T15:57:30+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://codefl0w.xyz/archive/android-tools/frp-helper.html</loc>
+    <lastmod>2026-02-11T15:57:30+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://codefl0w.xyz/archive/projects/gh-boards.html</loc>
+    <lastmod>2026-02-11T15:57:30+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://codefl0w.xyz/archive/web-tools/gh-boards/</loc>
+    <lastmod>2026-02-11T15:57:30+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://codefl0w.xyz/</loc>
+    <lastmod>2026-02-11T15:57:30+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>https://codefl0w.xyz/archive/android-tools/</loc>
+    <lastmod>2026-02-11T15:57:30+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://codefl0w.xyz/archive/projects/</loc>
+    <lastmod>2026-02-11T15:57:30+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://codefl0w.xyz/archive/web-tools/</loc>
+    <lastmod>2026-02-11T15:57:30+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://codefl0w.xyz/archive/downloads/</loc>
+    <lastmod>2026-02-11T15:57:30+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://codefl0w.xyz/archive/guides/</loc>
+    <lastmod>2026-02-11T15:57:30+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://codefl0w.xyz/archive/</loc>
+    <lastmod>2026-02-11T15:57:30+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://codefl0w.xyz/archive/projects/mtkclient-windows-installer.html</loc>
+    <lastmod>2026-02-11T15:57:30+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://codefl0w.xyz/archive/projects/quickadb.html</loc>
+    <lastmod>2026-02-11T15:57:30+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://codefl0w.xyz/robots.txt</loc>
+    <lastmod>2026-02-11T15:57:30+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://codefl0w.xyz/sitemap.xml</loc>
+    <lastmod>2026-02-11T15:57:30+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://codefl0w.xyz/archive/web-tools/textformat.html</loc>
+    <lastmod>2026-02-11T15:57:30+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://codefl0w.xyz/archive/projects/unsuper.html</loc>
+    <lastmod>2026-02-11T15:57:30+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://codefl0w.xyz/assets/css/style.css</loc>
+    <lastmod>2026-02-11T15:57:30+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
 </urlset>
