@@ -19,10 +19,7 @@
   <meta property="og:type" content="{{ page.og_type | default: 'website' }}">
   <meta property="og:image" content="{{ page_image | absolute_url }}">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{{ page.title | default: site.title }}">
-  <meta name="twitter:description" content="{{ page_description | strip_html | normalize_whitespace | truncate: 200 }}">
-  <meta name="twitter:image" content="{{ page_image | absolute_url }}">
+
 
   <script type="application/ld+json">
   {
@@ -41,30 +38,129 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@760&display=swap" rel="stylesheet">
+  <style>
+    header {
+      position: relative;
+    }
+
+    .header-breadcrumb-wrap {
+      position: absolute;
+      top: 0.35rem;
+      left: 0.75rem;
+      z-index: 2;
+      max-width: calc(100% - 1.5rem);
+      display: flex;
+      justify-content: flex-start;
+      font-family: system-ui, sans-serif;
+      align-items: center;
+    }
+
+    .header-home {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: #ff8ff5;
+      color: #121212;
+      text-decoration: none;
+      flex: 0 0 auto;
+      margin-right: 0.5rem;
+    }
+
+    .header-home svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      color: #c7c7c7;
+      font-size: 0.82rem;
+      min-width: 0;
+      justify-content: flex-start;
+      flex-wrap: nowrap;
+      overflow: hidden;
+    }
+
+    .breadcrumbs li {
+      display: inline-flex;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .breadcrumbs li + li::before {
+      content: "/";
+      margin: 0 0.35rem;
+      opacity: 0.65;
+    }
+
+    .breadcrumbs a,
+    .breadcrumbs span {
+      color: #e0e0e0;
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 22ch;
+    }
+
+    .breadcrumbs span[aria-current="page"] {
+      color: #ff8ff5;
+      font-weight: 600;
+    }
+
+    @media (max-width: 600px) {
+      .breadcrumbs {
+        font-size: 0.75rem;
+      }
+    }
+  </style>
 
   <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="fl0w" data-description="Support me on Buy me a coffee!" data-message="" data-color="#ff8ff5" data-position="Right" data-x_margin="18" data-y_margin="64"></script>
 </head>
 <body>
-  {% unless page.url == "/" %}
-    <!-- Back Button -->
-    <a href="javascript:history.back()" style="
-      position: absolute;
-      top: 1rem;
-      left: 1rem;
-      background-color: #ff8ff5;
-      color: #121212;
-      padding: 0.4em 0.8em;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
-      font-family: system-ui, sans-serif;
-      z-index: 1000;
-    ">
-      &larr; Back
-    </a>
-  {% endunless %}
-
+  {% assign page_parts = page.url | split: "/" %}
+  {% assign current_path = page.url %}
+  {% assign crumb_path = "" %}
   <header>
+    <div class="header-breadcrumb-wrap">
+      <a class="header-home" href="/" aria-label="Home">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 10.5 12 3l9 7.5"></path>
+          <path d="M5.5 9.5V21h13V9.5"></path>
+        </svg>
+      </a>
+      <ol class="breadcrumbs" aria-label="Breadcrumb">
+        <li><a href="/">Home</a></li>
+        {% for part in page_parts %}
+          {% unless part == "" %}
+            {% assign crumb_path = crumb_path | append: "/" | append: part %}
+            {% assign crumb_href = crumb_path | append: "/" %}
+            {% assign crumb_label = part | replace: ".html", "" | replace: "-", " " | capitalize %}
+            <li>
+              {% if current_path == crumb_path or current_path == crumb_href %}
+                <span aria-current="page">{{ crumb_label }}</span>
+              {% else %}
+                <a href="{{ crumb_href }}">{{ crumb_label }}</a>
+              {% endif %}
+            </li>
+          {% endunless %}
+        {% endfor %}
+      </ol>
+    </div>
     <h1 id="animated-title" data-title="{{ page.title }}"></h1>
   </header>
 
