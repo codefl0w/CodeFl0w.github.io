@@ -38,6 +38,9 @@ document.addEventListener('DOMContentLoaded', () => {
         { value: 'board', label: 'Board (Stars + Downloads)' },
         { value: 'badge_stars', label: 'Badge — Stars' },
         { value: 'badge_downloads', label: 'Badge — Downloads' },
+        { value: 'badge_followers', label: 'Badge — Followers' },
+        { value: 'badge_watchers', label: 'Badge — Watchers' },
+        { value: 'badge_workflow', label: 'Badge — Workflow Status' },
     ];
 
     // --- Initialization ---
@@ -50,12 +53,36 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function createDefaultArtifact(type) {
-        if (type === 'badge_stars' || type === 'badge_downloads') {
+        // Badge types with repo + color customization
+        if (type === 'badge_stars' || type === 'badge_downloads' || type === 'badge_watchers') {
             return {
                 type: type,
                 options: {
                     repo: '',
                     color: '#2ea44f',
+                    label_color: '#555555',
+                    text_style: 'normal'
+                }
+            };
+        }
+        // Followers — user-level, no repo needed
+        if (type === 'badge_followers') {
+            return {
+                type: type,
+                options: {
+                    color: '#2ea44f',
+                    label_color: '#555555',
+                    text_style: 'normal'
+                }
+            };
+        }
+        // Workflow status — repo + optional workflow file
+        if (type === 'badge_workflow') {
+            return {
+                type: type,
+                options: {
+                    repo: '',
+                    workflow: '',
                     label_color: '#555555',
                     text_style: 'normal'
                 }
@@ -157,20 +184,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 `<option value="${t.value}" ${art.type === t.value ? 'selected' : ''}>${t.label}</option>`
             ).join('');
 
-            const isBadge = art.type === 'badge_stars' || art.type === 'badge_downloads';
-
             // Build type-specific options HTML
             let optionsHTML = '';
-            if (isBadge) {
+
+            // Helper: color + text style row
+            const colorRow = (art, index) => {
                 const textStyleOptions = ['normal', 'bold', 'italic'].map(s =>
                     `<option value="${s}" ${art.options.text_style === s ? 'selected' : ''}>${s.charAt(0).toUpperCase() + s.slice(1)}</option>`
                 ).join('');
-
-                optionsHTML = `
-                    <div class="form-group">
-                        <label>Repository Name</label>
-                        <input type="text" class="art-repo" value="${art.options.repo || ''}" data-idx="${index}" placeholder="e.g. my-project">
-                    </div>
+                return `
                     <div class="grid-layout" style="grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
                         <div class="form-group">
                             <label>Badge Color</label>
@@ -192,10 +214,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                 ${textStyleOptions}
                             </select>
                         </div>
-                    </div>
-                `;
-            } else {
-                // Board options
+                    </div>`;
+            };
+
+            if (art.type === 'board') {
                 optionsHTML = `
                     <div class="grid-layout" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
                         <div class="form-group">
@@ -208,6 +230,31 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
                 `;
+            } else if (art.type === 'badge_followers') {
+                // No repo field — user-level badge
+                optionsHTML = colorRow(art, index);
+            } else if (art.type === 'badge_workflow') {
+                // Repo + optional workflow file
+                optionsHTML = `
+                    <div class="grid-layout" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label>Repository Name</label>
+                            <input type="text" class="art-repo" value="${art.options.repo || ''}" data-idx="${index}" placeholder="e.g. my-project">
+                        </div>
+                        <div class="form-group">
+                            <label>Workflow File <small style="color:var(--text-muted)">(optional)</small></label>
+                            <input type="text" class="art-workflow" value="${art.options.workflow || ''}" data-idx="${index}" placeholder="e.g. ci.yml or leave blank for latest">
+                        </div>
+                    </div>
+                ` + colorRow(art, index);
+            } else {
+                // stars, downloads, watchers — repo + colors
+                optionsHTML = `
+                    <div class="form-group">
+                        <label>Repository Name</label>
+                        <input type="text" class="art-repo" value="${art.options.repo || ''}" data-idx="${index}" placeholder="e.g. my-project">
+                    </div>
+                ` + colorRow(art, index);
             }
 
             el.innerHTML = `
@@ -260,6 +307,15 @@ document.addEventListener('DOMContentLoaded', () => {
             input.addEventListener('input', (e) => {
                 const idx = e.target.dataset.idx;
                 state.artifacts[idx].options.repo = e.target.value;
+                updatePreview();
+            });
+        });
+
+        // Workflow file input
+        document.querySelectorAll('.art-workflow').forEach(input => {
+            input.addEventListener('input', (e) => {
+                const idx = e.target.dataset.idx;
+                state.artifacts[idx].options.workflow = e.target.value;
                 updatePreview();
             });
         });
@@ -333,15 +389,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Map frontend types to manifest schema
         const typeMapping = {
-            'board': { type: 'board', style: 'board_stars_downloads' },
-            'badge_stars': { type: 'badge', style: 'badge_stars' },
-            'badge_downloads': { type: 'badge', style: 'badge_downloads' },
+            'board': { type: 'board', style: 'board_stars_downloads', badge_type: null },
+            'badge_stars': { type: 'badge', style: 'badge_stars', badge_type: 'stars' },
+            'badge_downloads': { type: 'badge', style: 'badge_downloads', badge_type: 'downloads' },
+            'badge_followers': { type: 'badge', style: 'badge_followers', badge_type: 'followers' },
+            'badge_watchers': { type: 'badge', style: 'badge_watchers', badge_type: 'watchers' },
+            'badge_workflow': { type: 'badge', style: 'badge_workflow', badge_type: 'workflow_status' },
         };
 
         // Auto-generate IDs
         const uniqueIds = {};
         const safeArtifacts = state.artifacts.map(art => {
-            const mapping = typeMapping[art.type] || { type: art.type, style: art.type };
+            const mapping = typeMapping[art.type] || { type: art.type, style: art.type, badge_type: null };
             let baseId = mapping.style;
             if (!uniqueIds[baseId]) uniqueIds[baseId] = 0;
             uniqueIds[baseId]++;
@@ -363,12 +422,15 @@ document.addEventListener('DOMContentLoaded', () => {
             // Type-specific options
             if (mapping.type === 'badge') {
                 result.options = {
-                    badge_type: art.type === 'badge_stars' ? 'stars' : 'downloads',
-                    repo: art.options.repo || '',
+                    badge_type: mapping.badge_type,
                     color: art.options.color || '#2ea44f',
                     label_color: art.options.label_color || '#555555',
                     text_style: art.options.text_style || 'normal',
                 };
+                // Include repo if present
+                if (art.options.repo) result.options.repo = art.options.repo;
+                // Include workflow file if present
+                if (art.options.workflow) result.options.workflow = art.options.workflow;
             } else {
                 result.options = {
                     max_repos: art.options.max_repos || 10,
@@ -458,15 +520,19 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             apiUrl = `${API_BASE_URL}/api/board?${params.toString()}`;
         } else if (firstArt.type === 'badge') {
-            const repo = firstArt.options.repo || 'example-repo';
+            const badgeType = firstArt.options.badge_type || 'stars';
             const params = new URLSearchParams({
                 user,
-                repo,
-                type: firstArt.options.badge_type || 'stars',
-                color: firstArt.options.color || '#2ea44f',
+                type: badgeType,
                 label_color: firstArt.options.label_color || '#555555',
                 text_style: firstArt.options.text_style || 'normal',
             });
+            // Add repo if applicable (not needed for followers)
+            if (firstArt.options.repo) params.set('repo', firstArt.options.repo);
+            // Add color (workflow_status overrides on server, but still send user's preference)
+            if (firstArt.options.color) params.set('color', firstArt.options.color);
+            // Add workflow file if set
+            if (firstArt.options.workflow) params.set('workflow', firstArt.options.workflow);
             apiUrl = `${API_BASE_URL}/api/badge?${params.toString()}`;
         }
 
