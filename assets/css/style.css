@@ -608,6 +608,14 @@ label {
   display: none;
 }
 
+.ghb-item-collapsed > .ghb-children {
+  display: none !important;
+}
+
+.ghb-item-open > .ghb-children {
+  display: block !important;
+}
+
 .ghb-selection {
   margin-top: 0.85rem;
   border: 1px solid #2f3b5e;

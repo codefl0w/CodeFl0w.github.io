@@ -166,6 +166,9 @@ description: "Browse generated gh-boards files, search badges, and copy direct l
 
       const itemEl = document.createElement("div");
       itemEl.className = "ghb-item";
+      if (isFolder) {
+        itemEl.classList.add(isOpen ? "ghb-item-open" : "ghb-item-collapsed");
+      }
 
       const rowEl = document.createElement("div");
       rowEl.className = `ghb-row ghb-row-${node.type}`;
@@ -201,6 +204,7 @@ description: "Browse generated gh-boards files, search badges, and copy direct l
         const childrenEl = document.createElement("div");
         childrenEl.className = "ghb-children";
         childrenEl.hidden = !isOpen;
+        childrenEl.style.display = isOpen ? "block" : "none";
         childrenEl.setAttribute("role", "group");
         node.children.forEach((child) => {
           childrenEl.appendChild(createTreeNode(child, depth + 1, expandAll));
@@ -246,6 +250,9 @@ description: "Browse generated gh-boards files, search badges, and copy direct l
       const nextExpanded = !isExpanded;
       rowEl.setAttribute("aria-expanded", String(nextExpanded));
       childrenEl.hidden = !nextExpanded;
+      childrenEl.style.display = nextExpanded ? "block" : "none";
+      itemEl.classList.remove("ghb-item-open", "ghb-item-collapsed");
+      itemEl.classList.add(nextExpanded ? "ghb-item-open" : "ghb-item-collapsed");
 
       const twistyEl = rowEl.querySelector(".ghb-twisty");
       if (twistyEl) twistyEl.textContent = nextExpanded ? "-" : "+";
