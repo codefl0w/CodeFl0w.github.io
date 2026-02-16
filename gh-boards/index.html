@@ -1,0 +1,328 @@
+---
+layout: default
+title: gh-boards File Explorer
+description: "Browse generated gh-boards files, search badges, and copy direct links."
+---
+
+<section class="ghb-browser">
+  <p class="ghb-subtitle">
+    Browse generated assets in <code>/gh-boards/out</code>. Double-click folders to expand and files to open.
+  </p>
+
+  <div class="ghb-toolbar">
+    <label for="ghb-search" class="ghb-search-label">Search</label>
+    <input id="ghb-search" class="ghb-search" type="search" placeholder="Search username, repository, badge type">
+  </div>
+
+  <div class="ghb-meta">
+    <span id="ghb-count">Loading...</span>
+    <span class="ghb-root-label">Root: /gh-boards/out</span>
+  </div>
+
+  <div id="ghb-tree" class="ghb-tree" role="tree" aria-label="gh-boards file explorer"></div>
+
+  <div class="ghb-selection">
+    <div id="ghb-selected-path" class="ghb-selected-path">Select a file to copy a direct link.</div>
+    <div class="ghb-selection-actions">
+      <button id="ghb-copy-url" class="ghb-btn" type="button" disabled>Copy URL</button>
+      <button id="ghb-copy-md" class="ghb-btn" type="button" disabled>Copy Markdown</button>
+    </div>
+  </div>
+
+  <p id="ghb-status" class="ghb-status" aria-live="polite"></p>
+</section>
+
+<script>
+  (() => {
+    const treeEl = document.getElementById("ghb-tree");
+    const countEl = document.getElementById("ghb-count");
+    const searchEl = document.getElementById("ghb-search");
+    const statusEl = document.getElementById("ghb-status");
+    const selectedPathEl = document.getElementById("ghb-selected-path");
+    const copyUrlBtn = document.getElementById("ghb-copy-url");
+    const copyMarkdownBtn = document.getElementById("ghb-copy-md");
+
+    const GH_OWNER = "codefl0w";
+    const GH_REPO = "codefl0w.github.io";
+    const GH_BRANCH = "main";
+    const OUT_PREFIX = "gh-boards/out/";
+
+    const folderIcon =
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6.5A2.5 2.5 0 0 1 5.5 4H9l2 2h7.5A2.5 2.5 0 0 1 21 8.5v9A2.5 2.5 0 0 1 18.5 20h-13A2.5 2.5 0 0 1 3 17.5v-11Z"></path><path d="M3 9h18"></path></svg>';
+    const fileIcon =
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path></svg>';
+
+    let fullTree = null;
+    let selectedPath = "";
+    let selectedRow = null;
+
+    function absoluteUrl(path) {
+      return new URL(path, window.location.origin).href;
+    }
+
+    function createFolderNode(name, path) {
+      return { type: "folder", name, path, children: [] };
+    }
+
+    function createFileNode(name, path) {
+      return { type: "file", name, path };
+    }
+
+    function sortTree(node) {
+      if (!node.children) return;
+      node.children.sort((a, b) => {
+        if (a.type !== b.type) return a.type === "folder" ? -1 : 1;
+        return a.name.localeCompare(b.name);
+      });
+      node.children.forEach((child) => {
+        if (child.type === "folder") sortTree(child);
+      });
+    }
+
+    function buildTree(paths) {
+      const root = createFolderNode("out", "/gh-boards/out/");
+
+      paths.forEach((path) => {
+        const relativePath = path.replace(/^\/gh-boards\/out\//, "");
+        if (!relativePath || relativePath === path) return;
+
+        const parts = relativePath.split("/");
+        let currentNode = root;
+        let currentPath = "/gh-boards/out";
+
+        parts.forEach((part, index) => {
+          const isFile = index === parts.length - 1;
+          currentPath += "/" + part;
+
+          if (isFile) {
+            const exists = currentNode.children.some((item) => item.type === "file" && item.name === part);
+            if (!exists) currentNode.children.push(createFileNode(part, currentPath));
+            return;
+          }
+
+          let nextFolder = currentNode.children.find((item) => item.type === "folder" && item.name === part);
+          if (!nextFolder) {
+            nextFolder = createFolderNode(part, currentPath + "/");
+            currentNode.children.push(nextFolder);
+          }
+          currentNode = nextFolder;
+        });
+      });
+
+      sortTree(root);
+      return root;
+    }
+
+    function cloneAndFilter(node, query) {
+      if (!query) return node;
+
+      const haystack = `${node.name} ${node.path}`.toLowerCase();
+
+      if (node.type === "file") {
+        return haystack.includes(query) ? { ...node } : null;
+      }
+
+      const filteredChildren = node.children
+        .map((child) => cloneAndFilter(child, query))
+        .filter(Boolean);
+
+      if (haystack.includes(query) || filteredChildren.length > 0) {
+        return { ...node, children: filteredChildren };
+      }
+
+      return null;
+    }
+
+    function countFiles(node) {
+      if (!node) return 0;
+      if (node.type === "file") return 1;
+      return node.children.reduce((sum, child) => sum + countFiles(child), 0);
+    }
+
+    function setSelection(path, row) {
+      selectedPath = path;
+      selectedPathEl.textContent = path;
+      copyUrlBtn.disabled = false;
+      copyMarkdownBtn.disabled = false;
+
+      if (selectedRow) selectedRow.classList.remove("ghb-row-selected");
+      selectedRow = row;
+      selectedRow.classList.add("ghb-row-selected");
+    }
+
+    function clearSelection() {
+      selectedPath = "";
+      selectedPathEl.textContent = "Select a file to copy a direct link.";
+      copyUrlBtn.disabled = true;
+      copyMarkdownBtn.disabled = true;
+      if (selectedRow) selectedRow.classList.remove("ghb-row-selected");
+      selectedRow = null;
+    }
+
+    function createTreeNode(node, depth, expandAll) {
+      const isRoot = depth === 0;
+      const isFolder = node.type === "folder";
+      const isOpen = isFolder && (isRoot || expandAll);
+
+      const itemEl = document.createElement("div");
+      itemEl.className = "ghb-item";
+
+      const rowEl = document.createElement("div");
+      rowEl.className = `ghb-row ghb-row-${node.type}`;
+      rowEl.dataset.type = node.type;
+      rowEl.dataset.path = node.path;
+      rowEl.style.paddingLeft = `${8 + depth * 20}px`;
+      rowEl.setAttribute("role", "treeitem");
+      if (isFolder) rowEl.setAttribute("aria-expanded", String(isOpen));
+
+      const twistyEl = document.createElement("span");
+      twistyEl.className = "ghb-twisty";
+      if (isFolder) {
+        twistyEl.textContent = isOpen ? "-" : "+";
+      } else {
+        twistyEl.textContent = "";
+        twistyEl.classList.add("ghb-twisty-empty");
+      }
+
+      const iconEl = document.createElement("span");
+      iconEl.className = "ghb-icon";
+      iconEl.innerHTML = isFolder ? folderIcon : fileIcon;
+
+      const nameEl = document.createElement("span");
+      nameEl.className = "ghb-name";
+      nameEl.textContent = node.name;
+
+      rowEl.appendChild(twistyEl);
+      rowEl.appendChild(iconEl);
+      rowEl.appendChild(nameEl);
+      itemEl.appendChild(rowEl);
+
+      if (isFolder) {
+        const childrenEl = document.createElement("div");
+        childrenEl.className = "ghb-children";
+        childrenEl.hidden = !isOpen;
+        childrenEl.setAttribute("role", "group");
+        node.children.forEach((child) => {
+          childrenEl.appendChild(createTreeNode(child, depth + 1, expandAll));
+        });
+        itemEl.appendChild(childrenEl);
+      }
+
+      return itemEl;
+    }
+
+    function renderTree(tree, query) {
+      treeEl.innerHTML = "";
+      clearSelection();
+
+      if (!tree || !tree.children || tree.children.length === 0) {
+        countEl.textContent = "0 file(s)";
+        treeEl.innerHTML = '<div class="ghb-empty">No files found for the current filter.</div>';
+        return;
+      }
+
+      const expandAll = Boolean(query);
+      treeEl.appendChild(createTreeNode(tree, 0, expandAll));
+      countEl.textContent = `${countFiles(tree)} file(s)`;
+    }
+
+    function applyFilter() {
+      const query = searchEl.value.trim().toLowerCase();
+      const filteredTree = cloneAndFilter(fullTree, query);
+      renderTree(filteredTree, query);
+      statusEl.textContent = query ? `Filter: ${query}` : "";
+    }
+
+    function getChildrenElement(itemEl) {
+      return Array.from(itemEl.children).find((child) => child.classList.contains("ghb-children"));
+    }
+
+    function toggleFolder(rowEl) {
+      const itemEl = rowEl.parentElement;
+      const childrenEl = getChildrenElement(itemEl);
+      if (!childrenEl) return;
+
+      const isExpanded = rowEl.getAttribute("aria-expanded") === "true";
+      const nextExpanded = !isExpanded;
+      rowEl.setAttribute("aria-expanded", String(nextExpanded));
+      childrenEl.hidden = !nextExpanded;
+
+      const twistyEl = rowEl.querySelector(".ghb-twisty");
+      if (twistyEl) twistyEl.textContent = nextExpanded ? "-" : "+";
+    }
+
+    async function loadTree() {
+      const apiUrl = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/git/trees/${GH_BRANCH}?recursive=1`;
+      const response = await fetch(apiUrl, { cache: "no-store" });
+
+      if (!response.ok) {
+        if (response.status === 403) {
+          throw new Error("GitHub API rate limit reached. Try again later.");
+        }
+        throw new Error("Cannot load repository tree.");
+      }
+
+      const payload = await response.json();
+      const entries = Array.isArray(payload.tree) ? payload.tree : [];
+      const paths = entries
+        .filter((entry) => entry.type === "blob" && entry.path.startsWith(OUT_PREFIX) && !entry.path.endsWith(".gitkeep"))
+        .map((entry) => `/${entry.path}`);
+
+      return buildTree(paths);
+    }
+
+    async function copyText(value, button) {
+      try {
+        await navigator.clipboard.writeText(value);
+        const original = button.textContent;
+        button.textContent = "Copied";
+        setTimeout(() => {
+          button.textContent = original;
+        }, 900);
+      } catch (_) {
+        button.textContent = "Copy failed";
+      }
+    }
+
+    treeEl.addEventListener("click", (event) => {
+      const rowEl = event.target.closest(".ghb-row");
+      if (!rowEl) return;
+      if (rowEl.dataset.type !== "file") return;
+      setSelection(rowEl.dataset.path, rowEl);
+    });
+
+    treeEl.addEventListener("dblclick", (event) => {
+      const rowEl = event.target.closest(".ghb-row");
+      if (!rowEl) return;
+
+      if (rowEl.dataset.type === "folder") {
+        toggleFolder(rowEl);
+        return;
+      }
+
+      window.open(rowEl.dataset.path, "_blank", "noopener");
+    });
+
+    searchEl.addEventListener("input", applyFilter);
+
+    copyUrlBtn.addEventListener("click", () => {
+      if (!selectedPath) return;
+      copyText(absoluteUrl(selectedPath), copyUrlBtn);
+    });
+
+    copyMarkdownBtn.addEventListener("click", () => {
+      if (!selectedPath) return;
+      copyText(`![badge](${absoluteUrl(selectedPath)})`, copyMarkdownBtn);
+    });
+
+    (async () => {
+      try {
+        fullTree = await loadTree();
+        renderTree(fullTree, "");
+      } catch (error) {
+        countEl.textContent = "Failed to load index";
+        treeEl.innerHTML = `<div class="ghb-empty">${error.message}</div>`;
+      }
+    })();
+  })();
+</script>

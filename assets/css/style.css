@@ -471,3 +471,205 @@ label {
   align-items: center;
   gap: 0.3rem;
 }
+
+/* === GH-BOARDS EXPLORER === */
+.ghb-browser {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem 2rem;
+}
+
+.ghb-subtitle {
+  margin: 0 0 1rem;
+  color: #a0a0a0;
+}
+
+.ghb-toolbar {
+  display: flex;
+  gap: 0.65rem;
+  align-items: center;
+  margin-bottom: 0.85rem;
+}
+
+.ghb-search-label {
+  color: #a0a0a0;
+  font-size: 0.92rem;
+}
+
+.ghb-search {
+  width: 100%;
+  padding: 0.62rem 0.78rem;
+  border: 1px solid #404f7a;
+  border-radius: 8px;
+  background: #151c2c;
+  color: #e0e0e0;
+  font-size: 0.94rem;
+}
+
+.ghb-search:focus {
+  outline: 1px solid #ff8ff5;
+  border-color: transparent;
+}
+
+.ghb-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  color: #a0a0a0;
+  font-size: 0.9rem;
+  flex-wrap: wrap;
+}
+
+.ghb-tree {
+  border: 1px solid #2f3b5e;
+  border-radius: 10px;
+  background: #1b223a;
+  min-height: 220px;
+  max-height: 70vh;
+  overflow: auto;
+  padding: 0.35rem 0.25rem;
+}
+
+.ghb-item {
+  display: block;
+}
+
+.ghb-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 32px;
+  border-radius: 6px;
+  cursor: default;
+  user-select: none;
+}
+
+.ghb-row:hover {
+  background: rgba(64, 79, 122, 0.35);
+}
+
+.ghb-row-selected {
+  background: rgba(255, 143, 245, 0.18);
+  outline: 1px solid rgba(255, 143, 245, 0.45);
+}
+
+.ghb-twisty {
+  width: 14px;
+  text-align: center;
+  color: #a0a0a0;
+  font-weight: 700;
+  font-family: monospace;
+  flex: 0 0 14px;
+}
+
+.ghb-twisty-empty {
+  visibility: hidden;
+}
+
+.ghb-icon {
+  width: 16px;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 16px;
+}
+
+.ghb-icon svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ghb-row-folder .ghb-icon svg {
+  stroke: #ffb547;
+}
+
+.ghb-row-file .ghb-icon svg {
+  stroke: #9bd4ff;
+}
+
+.ghb-name {
+  color: #e0e0e0;
+  font-size: 0.92rem;
+  white-space: nowrap;
+}
+
+.ghb-children {
+  display: block;
+}
+
+.ghb-selection {
+  margin-top: 0.85rem;
+  border: 1px solid #2f3b5e;
+  border-radius: 10px;
+  background: #1b223a;
+  padding: 0.75rem;
+}
+
+.ghb-selected-path {
+  color: #e0e0e0;
+  font-size: 0.9rem;
+  word-break: break-all;
+}
+
+.ghb-selection-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.ghb-btn {
+  background: #232d45;
+  border: 1px solid #404f7a;
+  color: #e0e0e0;
+  border-radius: 6px;
+  padding: 0.45rem 0.75rem;
+  font-weight: 600;
+}
+
+.ghb-btn:hover:enabled {
+  background: #2e3c5d;
+  border-color: #ff8ff5;
+}
+
+.ghb-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.ghb-status {
+  color: #a0a0a0;
+  min-height: 1.2rem;
+  margin-top: 0.55rem;
+  font-size: 0.85rem;
+}
+
+.ghb-empty {
+  margin: 0.75rem;
+  padding: 0.9rem;
+  color: #a0a0a0;
+  border: 1px dashed #404f7a;
+  border-radius: 8px;
+  background: rgba(21, 28, 44, 0.6);
+}
+
+@media (max-width: 700px) {
+  .ghb-browser {
+    padding: 1rem 1rem 1.5rem;
+  }
+
+  .ghb-row {
+    min-height: 30px;
+  }
+
+  .ghb-name {
+    font-size: 0.88rem;
+  }
+}
