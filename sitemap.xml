@@ -4,13 +4,28 @@ permalink: /sitemap.xml
 ---
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  {%- comment -%} Posts (always HTML) {%- endcomment -%}
+  {% for post in site.posts %}
+  <url>
+    <loc>{{ site.url | append: post.url }}</loc>
+    <lastmod>{{ post.date | date_to_xmlschema }}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  {% endfor %}
+
+  {%- comment -%} Pages (filter out non-HTML, assets, robots, sitemap) {%- endcomment -%}
   {% assign pages = site.pages | where_exp: "p", "p.sitemap != false" %}
   {% for page in pages %}
+    {% if page.output == "html" and page.url != "/robots.txt" and page.url != "/sitemap.xml" and page.url contains "/assets/" == false %}
   <url>
     <loc>{{ site.url | append: page.url }}</loc>
     <lastmod>{{ page.date | default: site.time | date_to_xmlschema }}</lastmod>
     <changefreq>{% if page.url == "/" %}weekly{% else %}monthly{% endif %}</changefreq>
     <priority>{% if page.url == "/" %}1.0{% else %}0.6{% endif %}</priority>
   </url>
+    {% endif %}
   {% endfor %}
+
 </urlset>
