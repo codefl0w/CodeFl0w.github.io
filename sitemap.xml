@@ -5,7 +5,7 @@ permalink: /sitemap.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  {%- comment -%} Posts (always HTML) {%- endcomment -%}
+  {%- comment -%} POSTS (always indexable) {%- endcomment -%}
   {% for post in site.posts %}
   <url>
     <loc>{{ site.url | append: post.url }}</loc>
@@ -15,17 +15,20 @@ permalink: /sitemap.xml
   </url>
   {% endfor %}
 
-  {%- comment -%} Pages (filter out non-HTML, assets, robots, sitemap) {%- endcomment -%}
-  {% assign pages = site.pages | where_exp: "p", "p.sitemap != false" %}
-  {% for page in pages %}
-    {% if page.output == "html" and page.url != "/robots.txt" and page.url != "/sitemap.xml" and page.url contains "/assets/" == false %}
+  {%- comment -%} PAGES (filter out assets, robots, sitemap; accept .md/.markdown/.html/.htm) {%- endcomment -%}
+  {% for page in site.pages %}
+    {% assign p = page.path | downcase %}
+    {% assign ext = p | split: '.' | last %}
+    {% unless p contains 'assets/' or page.url == '/robots.txt' or page.url == '/sitemap.xml' %}
+      {% if ext == 'md' or ext == 'markdown' or ext == 'html' or ext == 'htm' %}
   <url>
     <loc>{{ site.url | append: page.url }}</loc>
-    <lastmod>{{ page.date | default: site.time | date_to_xmlschema }}</lastmod>
-    <changefreq>{% if page.url == "/" %}weekly{% else %}monthly{% endif %}</changefreq>
-    <priority>{% if page.url == "/" %}1.0{% else %}0.6{% endif %}</priority>
+    <lastmod>{% if page.date %}{{ page.date | date_to_xmlschema }}{% else %}{{ site.time | date_to_xmlschema }}{% endif %}</lastmod>
+    <changefreq>{% if page.url == '/' %}weekly{% else %}monthly{% endif %}</changefreq>
+    <priority>{% if page.url == '/' %}1.0{% else %}0.6{% endif %}</priority>
   </url>
-    {% endif %}
+      {% endif %}
+    {% endunless %}
   {% endfor %}
 
 </urlset>
