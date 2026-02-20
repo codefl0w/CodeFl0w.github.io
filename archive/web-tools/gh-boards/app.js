@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { value: 'badge_followers', label: 'Badge — Followers' },
         { value: 'badge_watchers', label: 'Badge — Watchers' },
         { value: 'badge_workflow', label: 'Badge — Workflow Status' },
+        { value: 'badge_license', label: 'Badge — License' },
     ];
 
     // --- Initialization ---
@@ -54,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function createDefaultArtifact(type) {
         // Badge types with repo + color customization
-        if (type === 'badge_stars' || type === 'badge_downloads' || type === 'badge_watchers') {
+        if (type === 'badge_stars' || type === 'badge_downloads' || type === 'badge_watchers' || type === 'badge_license') {
             return {
                 type: type,
                 options: {
@@ -395,6 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'badge_followers': { type: 'badge', style: 'badge_followers', badge_type: 'followers' },
             'badge_watchers': { type: 'badge', style: 'badge_watchers', badge_type: 'watchers' },
             'badge_workflow': { type: 'badge', style: 'badge_workflow', badge_type: 'workflow_status' },
+            'badge_license': { type: 'badge', style: 'badge_license', badge_type: 'license' },
         };
 
         // Auto-generate IDs
