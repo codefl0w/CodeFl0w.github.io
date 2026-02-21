@@ -235,16 +235,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 // No repo field — user-level badge
                 optionsHTML = colorRow(art, index);
             } else if (art.type === 'badge_workflow') {
-                // Repo + optional workflow file
+                // Repo + optional workflow file + optional custom label
                 optionsHTML = `
-                    <div class="grid-layout" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="grid-layout" style="grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
                         <div class="form-group">
                             <label>Repository Name</label>
                             <input type="text" class="art-repo" value="${art.options.repo || ''}" data-idx="${index}" placeholder="e.g. my-project">
                         </div>
                         <div class="form-group">
                             <label>Workflow File <small style="color:var(--text-muted)">(optional)</small></label>
-                            <input type="text" class="art-workflow" value="${art.options.workflow || ''}" data-idx="${index}" placeholder="e.g. ci.yml or leave blank for latest">
+                            <input type="text" class="art-workflow" value="${art.options.workflow || ''}" data-idx="${index}" placeholder="e.g. ci.yml">
+                        </div>
+                        <div class="form-group">
+                            <label>Custom Label <small style="color:var(--text-muted)">(optional)</small></label>
+                            <input type="text" class="art-label" value="${art.options.label || ''}" data-idx="${index}" placeholder="e.g. Windows Build">
                         </div>
                     </div>
                 ` + colorRow(art, index);
@@ -321,6 +325,14 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
+        // Custom label input
+        document.querySelectorAll('.art-label').forEach(input => {
+            input.addEventListener('input', (e) => {
+                const idx = e.target.dataset.idx;
+                state.artifacts[idx].options.label = e.target.value;
+                updatePreview();
+            });
+        });
         // Color pickers (sync with text inputs)
         document.querySelectorAll('.art-color').forEach(input => {
             input.addEventListener('input', (e) => {
@@ -433,6 +445,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (art.options.repo) result.options.repo = art.options.repo;
                 // Include workflow file if present
                 if (art.options.workflow) result.options.workflow = art.options.workflow;
+                // Include custom label if present
+                if (art.options.label) result.options.label = art.options.label;
             } else {
                 result.options = {
                     max_repos: art.options.max_repos || 10,
@@ -535,6 +549,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (firstArt.options.color) params.set('color', firstArt.options.color);
             // Add workflow file if set
             if (firstArt.options.workflow) params.set('workflow', firstArt.options.workflow);
+            // Add custom label if set
+            if (firstArt.options.label) params.set('label', firstArt.options.label);
             apiUrl = `${API_BASE_URL}/api/badge?${params.toString()}`;
         }
 
