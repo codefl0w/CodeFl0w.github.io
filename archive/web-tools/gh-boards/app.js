@@ -228,11 +228,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function toggleRepoInputs() {
         if (state.selectMethod === 'manual') {
-            ui.limitGroup.classList.add('hidden');
-            ui.manualReposGroup.classList.remove('hidden');
+            if (ui.limitGroup) ui.limitGroup.classList.add('hidden');
+            if (ui.manualReposGroup) ui.manualReposGroup.classList.remove('hidden');
         } else {
-            ui.limitGroup.classList.remove('hidden');
-            ui.manualReposGroup.classList.add('hidden');
+            if (ui.limitGroup) ui.limitGroup.classList.remove('hidden');
+            if (ui.manualReposGroup) ui.manualReposGroup.classList.add('hidden');
         }
     }
 
@@ -635,7 +635,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         img.onerror = () => {
             ui.svgPreview.classList.remove('loading');
-            ui.svgPreview.innerHTML = '<div style="color:red">Failed to load preview. Ensure API is running.</div>';
+            ui.svgPreview.innerHTML = '<div style="color:red">Failed to load preview. Make sure the values are correct.</div>';
         };
 
         ui.svgPreview.appendChild(img);

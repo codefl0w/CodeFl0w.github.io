@@ -64,10 +64,7 @@ title: gh-boards Generator
             <div class="artifacts-list" id="artifacts-list">
                 <!-- Dynamic artifacts will appear here -->
             </div>
-            <div style="display: flex; gap: 0.75rem; margin-top: 0.5rem;">
-                <button class="btn btn-secondary" id="add-artifact-btn" style="flex: 1;">+ Add Artifact</button>
-                <button class="btn btn-secondary" id="import-btn" style="flex: 0 0 auto;">Import JSON</button>
-            </div>
+            <button class="btn btn-secondary" id="add-artifact-btn">+ Add Artifact</button>
             <input type="file" id="import-file-input" accept=".json" style="display: none;">
         </section>
 
@@ -85,7 +82,7 @@ title: gh-boards Generator
                 style="margin-bottom: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 8px;">
                 <label
                     style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 0.5rem;">Direct
-                    Link (for README)</label>
+                    link of the preview</label>
                 <div style="display: flex; gap: 0.5rem;">
                     <input type="text" id="direct-link-input" readonly
                         style="flex: 1; padding: 0.5rem; border-radius: 4px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3); color: var(--text-main); font-family: monospace;">
@@ -99,7 +96,13 @@ title: gh-boards Generator
                 <div class="placeholder-text">Preview will appear here</div>
             </div>
 
-            <h3>Manifest JSON</h3>
+            <div class="preview-header">
+                <h3>Manifest JSON</h3>
+                <div class="actions">
+                    <button class="btn btn-primary" id="import-btn"
+                        style="background: #2ea44f;">Import JSON</button>
+                </div>
+            </div>
             <div style="position: relative;">
                 <pre><code id="json-preview" class="language-json">...</code></pre>
                 <div class="actions" style="position: absolute; top: 10px; right: 10px;">
@@ -111,17 +114,17 @@ title: gh-boards Generator
             <div class="instructions">
                 <h3>How it works</h3>
                 <ol>
-                    <li><strong>Instant:</strong> Use the "Direct Link" above for immediate results (powered by
-                        Vercel).</li>
-                    <li><strong>Hourly:</strong> Click "Add to Hourly Updates" to let our GitHub Bot manage a
-                        persistent, high-performance copy in the repo.</li>
+                    <li><strong>Instant:</strong> Use the "Direct Link" above for an immediate preview. <u> Previews update only once every 24 hours.</u></li>
+                    <li><strong>Hourly:</strong> Click "Add to Hourly Updates" to let the GitHub Bot manage a
+                        persistent, hourly updated version of all your badges and boards.</li>
+                    <li><button class="btn btn-primary" type="button" style="background: #2ea44f;" onclick="location.href='/gh-boards/'">View all generated artifacts and use yours</button></li>
                 </ol>
             </div>
         </section>
 
     </div>
 
-    <!-- Import Modal (outside grid to avoid breaking layout) -->
+    <!-- Import Modal -->
     <div class="import-modal-overlay hidden" id="import-modal">
         <div class="import-modal glass-panel">
             <h2>Import Configuration</h2>
