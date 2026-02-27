@@ -25,7 +25,7 @@ title: gh-boards Generator
             </div>
 
             <div class="form-group">
-                <label>Board Theme</label>
+                <label>Theme</label>
                 <div class="radio-group">
                     <label class="radio-card">
                         <input type="radio" name="theme" value="dark" checked>
@@ -64,8 +64,28 @@ title: gh-boards Generator
             <div class="artifacts-list" id="artifacts-list">
                 <!-- Dynamic artifacts will appear here -->
             </div>
-            <button class="btn btn-secondary" id="add-artifact-btn">+ Add Artifact</button>
+            <div style="display: flex; gap: 0.75rem; margin-top: 0.5rem;">
+                <button class="btn btn-secondary" id="add-artifact-btn" style="flex: 1;">+ Add Artifact</button>
+                <button class="btn btn-secondary" id="import-btn" style="flex: 0 0 auto;">Import JSON</button>
+            </div>
+            <input type="file" id="import-file-input" accept=".json" style="display: none;">
         </section>
+
+        <!-- Import Modal -->
+        <div class="import-modal-overlay hidden" id="import-modal">
+            <div class="import-modal glass-panel">
+                <h2>Import Configuration</h2>
+                <p style="color: var(--text-muted); margin-bottom: 1rem;">
+                    Paste your existing <code>user.json</code> manifest below, or
+                    <a href="#" id="import-file-link" style="color: var(--accent-pink);">upload a file</a>.
+                </p>
+                <textarea id="import-textarea" rows="12" placeholder='{ "user": "...", "artifacts": [...] }'></textarea>
+                <div style="display: flex; gap: 0.75rem; margin-top: 1rem; justify-content: flex-end;">
+                    <button class="btn btn-outline" id="import-cancel-btn">Cancel</button>
+                    <button class="btn" id="import-confirm-btn">Import</button>
+                </div>
+            </div>
+        </div>
 
         <!-- Preview Panel -->
         <section class="preview-panel glass-panel">
@@ -111,8 +131,6 @@ title: gh-boards Generator
                         Vercel).</li>
                     <li><strong>Hourly:</strong> Click "Add to Hourly Updates" to let our GitHub Bot manage a
                         persistent, high-performance copy in the repo.</li>
-                    <li><button class="btn btn-primary" type="button" style="background: #2ea44f;" onclick="location.href='/gh-boards/'">View all generated artifacts and use yours</button></li>
-
                 </ol>
             </div>
         </section>

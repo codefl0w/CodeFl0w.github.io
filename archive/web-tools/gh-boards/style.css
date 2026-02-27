@@ -38,7 +38,6 @@ header {
 
 header h1 {
     font-family: 'Open Sans', sans-serif;
-    /* Fallback if not loaded */
     font-size: 2rem;
     margin-bottom: 0.5rem;
 }
@@ -67,7 +66,6 @@ header p {
 }
 
 /* === CARDS / PANELS === */
-/* Replaces .glass-panel to match user's a.card style */
 .glass-panel,
 .card {
     background: var(--card-bg);
@@ -173,7 +171,6 @@ select {
     width: 100%;
     padding: 0.75rem;
     background: #121826;
-    /* Slightly darker than card */
     border: 1px solid var(--card-border);
     border-radius: 5px;
     color: var(--text-main);
@@ -270,7 +267,6 @@ select:focus {
 
 .svg-container {
     background: #0d1117;
-    /* Always dark for preview contrast */
     border: 1px solid var(--card-border);
     border-radius: 8px;
     padding: 1rem;
@@ -308,6 +304,42 @@ code {
 
 .instructions li {
     margin-bottom: 0.5rem;
+}
+
+/* Import Modal */
+.import-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.import-modal-overlay.hidden {
+    display: none;
+}
+
+.import-modal {
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    animation: modal-in 0.2s ease-out;
+}
+
+.import-modal textarea {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    resize: vertical;
+    min-height: 180px;
+}
+
+@keyframes modal-in {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 /* Mobile */

@@ -27,7 +27,14 @@ document.addEventListener('DOMContentLoaded', () => {
         filepathHint: document.getElementById('filepath-hint'),
         directLinkInput: document.getElementById('direct-link-input'),
         copyLinkBtn: document.getElementById('copy-link-btn'),
-        addRotationBtn: document.getElementById('add-rotation-btn')
+        addRotationBtn: document.getElementById('add-rotation-btn'),
+        importBtn: document.getElementById('import-btn'),
+        importFileInput: document.getElementById('import-file-input'),
+        importModal: document.getElementById('import-modal'),
+        importTextarea: document.getElementById('import-textarea'),
+        importConfirmBtn: document.getElementById('import-confirm-btn'),
+        importCancelBtn: document.getElementById('import-cancel-btn'),
+        importFileLink: document.getElementById('import-file-link')
     };
 
     // --- Configuration ---
@@ -42,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { value: 'badge_watchers', label: 'Badge — Watchers' },
         { value: 'badge_workflow', label: 'Badge — Workflow Status' },
         { value: 'badge_license', label: 'Badge — License' },
+        { value: 'badge_forks', label: 'Badge — Forks' },
     ];
 
     // --- Initialization ---
@@ -55,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function createDefaultArtifact(type) {
         // Badge types with repo + color customization
-        if (type === 'badge_stars' || type === 'badge_downloads' || type === 'badge_watchers' || type === 'badge_license') {
+        if (type === 'badge_stars' || type === 'badge_downloads' || type === 'badge_watchers' || type === 'badge_license' || type === 'badge_forks') {
             return {
                 type: type,
                 options: {
@@ -161,6 +169,60 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (ui.addRotationBtn) {
             ui.addRotationBtn.addEventListener('click', openGitHubIssue);
+        }
+
+        // Import functionality
+        if (ui.importBtn) {
+            ui.importBtn.addEventListener('click', () => {
+                ui.importModal.classList.remove('hidden');
+                ui.importTextarea.value = '';
+                ui.importTextarea.focus();
+            });
+        }
+        if (ui.importCancelBtn) {
+            ui.importCancelBtn.addEventListener('click', () => {
+                ui.importModal.classList.add('hidden');
+            });
+        }
+        if (ui.importModal) {
+            ui.importModal.addEventListener('click', (e) => {
+                if (e.target === ui.importModal) ui.importModal.classList.add('hidden');
+            });
+        }
+        if (ui.importConfirmBtn) {
+            ui.importConfirmBtn.addEventListener('click', () => {
+                try {
+                    const json = JSON.parse(ui.importTextarea.value);
+                    importManifest(json);
+                    ui.importModal.classList.add('hidden');
+                } catch (err) {
+                    alert('Invalid JSON: ' + err.message);
+                }
+            });
+        }
+        if (ui.importFileLink) {
+            ui.importFileLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                ui.importFileInput.click();
+            });
+        }
+        if (ui.importFileInput) {
+            ui.importFileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    try {
+                        const json = JSON.parse(ev.target.result);
+                        importManifest(json);
+                        ui.importModal.classList.add('hidden');
+                    } catch (err) {
+                        alert('Invalid JSON file: ' + err.message);
+                    }
+                };
+                reader.readAsText(file);
+                e.target.value = ''; // reset so same file can be re-imported
+            });
         }
     }
 
@@ -409,6 +471,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'badge_watchers': { type: 'badge', style: 'badge_watchers', badge_type: 'watchers' },
             'badge_workflow': { type: 'badge', style: 'badge_workflow', badge_type: 'workflow_status' },
             'badge_license': { type: 'badge', style: 'badge_license', badge_type: 'license' },
+            'badge_forks': { type: 'badge', style: 'badge_forks', badge_type: 'forks' },
         };
 
         // Auto-generate IDs
@@ -613,5 +676,77 @@ document.addEventListener('DOMContentLoaded', () => {
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
+    }
+
+    // --- Import ---
+    function importManifest(json) {
+        // Reverse badge_type → frontend type mapping
+        const reverseTypeMap = {
+            'stars': 'badge_stars',
+            'downloads': 'badge_downloads',
+            'followers': 'badge_followers',
+            'watchers': 'badge_watchers',
+            'workflow_status': 'badge_workflow',
+            'license': 'badge_license',
+            'forks': 'badge_forks',
+        };
+
+        // Set username
+        state.username = json.user || '';
+        if (ui.username) ui.username.value = state.username;
+
+        // Set theme
+        state.theme = (json.defaults && json.defaults.theme) || 'dark';
+        ui.themeRadios.forEach(r => { r.checked = r.value === state.theme; });
+
+        // Set select method
+        const method = (json.select && json.select.method) || 'top_stars';
+        state.selectMethod = method === 'explicit' ? 'manual' : method;
+        ui.selectMethodRadios.forEach(r => { r.checked = r.value === state.selectMethod; });
+
+        // Set manual repos
+        if (state.selectMethod === 'manual' && json.targets && json.targets.repos) {
+            state.manualRepos = json.targets.repos.join(', ');
+            if (ui.manualRepos) ui.manualRepos.value = state.manualRepos;
+        }
+        toggleRepoInputs();
+
+        // Reverse-map artifacts
+        state.artifacts = (json.artifacts || []).map(art => {
+            if (art.type === 'board') {
+                return {
+                    type: 'board',
+                    options: {
+                        max_repos: (art.options && art.options.max_repos) || 10,
+                        show_stars: art.options ? art.options.show_stars !== false : true
+                    }
+                };
+            }
+            if (art.type === 'badge') {
+                const bt = (art.options && art.options.badge_type) || 'stars';
+                const frontendType = reverseTypeMap[bt] || 'badge_stars';
+                return {
+                    type: frontendType,
+                    options: {
+                        badge_type: bt,
+                        repo: (art.options && art.options.repo) || '',
+                        color: (art.options && art.options.color) || '#2ea44f',
+                        label_color: (art.options && art.options.label_color) || '#555555',
+                        text_style: (art.options && art.options.text_style) || 'normal',
+                        workflow: (art.options && art.options.workflow) || '',
+                        label: (art.options && art.options.label) || '',
+                    }
+                };
+            }
+            // Fallback
+            return createDefaultArtifact('board');
+        });
+
+        if (state.artifacts.length === 0) {
+            state.artifacts = [createDefaultArtifact('board')];
+        }
+
+        renderArtifacts();
+        updatePreview();
     }
 });
