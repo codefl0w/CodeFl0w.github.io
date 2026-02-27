@@ -71,22 +71,6 @@ title: gh-boards Generator
             <input type="file" id="import-file-input" accept=".json" style="display: none;">
         </section>
 
-        <!-- Import Modal -->
-        <div class="import-modal-overlay hidden" id="import-modal">
-            <div class="import-modal glass-panel">
-                <h2>Import Configuration</h2>
-                <p style="color: var(--text-muted); margin-bottom: 1rem;">
-                    Paste your existing <code>user.json</code> manifest below, or
-                    <a href="#" id="import-file-link" style="color: var(--accent-pink);">upload a file</a>.
-                </p>
-                <textarea id="import-textarea" rows="12" placeholder='{ "user": "...", "artifacts": [...] }'></textarea>
-                <div style="display: flex; gap: 0.75rem; margin-top: 1rem; justify-content: flex-end;">
-                    <button class="btn btn-outline" id="import-cancel-btn">Cancel</button>
-                    <button class="btn" id="import-confirm-btn">Import</button>
-                </div>
-            </div>
-        </div>
-
         <!-- Preview Panel -->
         <section class="preview-panel glass-panel">
             <div class="preview-header">
@@ -135,6 +119,22 @@ title: gh-boards Generator
             </div>
         </section>
 
+    </div>
+
+    <!-- Import Modal (outside grid to avoid breaking layout) -->
+    <div class="import-modal-overlay hidden" id="import-modal">
+        <div class="import-modal glass-panel">
+            <h2>Import Configuration</h2>
+            <p style="color: var(--text-muted); margin-bottom: 1rem;">
+                Paste your existing <code>user.json</code> manifest below, or
+                <a href="#" id="import-file-link" style="color: var(--accent-pink);">upload a file</a>.
+            </p>
+            <textarea id="import-textarea" rows="12" placeholder='{ "user": "...", "artifacts": [...] }'></textarea>
+            <div style="display: flex; gap: 0.75rem; margin-top: 1rem; justify-content: flex-end;">
+                <button class="btn btn-outline" id="import-cancel-btn">Cancel</button>
+                <button class="btn" id="import-confirm-btn">Import</button>
+            </div>
+        </div>
     </div>
 </div>
 
