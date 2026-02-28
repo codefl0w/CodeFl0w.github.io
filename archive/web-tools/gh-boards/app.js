@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { value: 'badge_workflow', label: 'Badge — Workflow Status' },
         { value: 'badge_license', label: 'Badge — License' },
         { value: 'badge_forks', label: 'Badge — Forks' },
+        { value: 'badge_custom', label: 'Badge — Custom' },
     ];
 
     // --- Initialization ---
@@ -92,6 +93,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 options: {
                     repo: '',
                     workflow: '',
+                    label_color: '#555555',
+                    text_style: 'normal'
+                }
+            };
+        }
+        // Custom badge — no repo, just left/right text
+        if (type === 'badge_custom') {
+            return {
+                type: type,
+                options: {
+                    label: '',
+                    value: '',
+                    color: '#2ea44f',
                     label_color: '#555555',
                     text_style: 'normal'
                 }
@@ -314,6 +328,20 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
                 ` + colorRow(art, index);
+            } else if (art.type === 'badge_custom') {
+                // Custom badge — left text + right text, no repo
+                optionsHTML = `
+                    <div class="grid-layout" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label>Left Text (Label)</label>
+                            <input type="text" class="art-label" value="${art.options.label || ''}" data-idx="${index}" placeholder="e.g. version">
+                        </div>
+                        <div class="form-group">
+                            <label>Right Text (Value)</label>
+                            <input type="text" class="art-value" value="${art.options.value || ''}" data-idx="${index}" placeholder="e.g. v1.2.3">
+                        </div>
+                    </div>
+                ` + colorRow(art, index);
             } else {
                 // stars, downloads, watchers — repo + colors
                 optionsHTML = `
@@ -395,6 +423,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 updatePreview();
             });
         });
+
+        // Custom badge value input
+        document.querySelectorAll('.art-value').forEach(input => {
+            input.addEventListener('input', (e) => {
+                const idx = e.target.dataset.idx;
+                state.artifacts[idx].options.value = e.target.value;
+                updatePreview();
+            });
+        });
         // Color pickers (sync with text inputs)
         document.querySelectorAll('.art-color').forEach(input => {
             input.addEventListener('input', (e) => {
@@ -472,6 +509,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'badge_workflow': { type: 'badge', style: 'badge_workflow', badge_type: 'workflow_status' },
             'badge_license': { type: 'badge', style: 'badge_license', badge_type: 'license' },
             'badge_forks': { type: 'badge', style: 'badge_forks', badge_type: 'forks' },
+            'badge_custom': { type: 'badge', style: 'badge_custom', badge_type: 'custom' },
         };
 
         // Auto-generate IDs
@@ -510,6 +548,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (art.options.workflow) result.options.workflow = art.options.workflow;
                 // Include custom label if present
                 if (art.options.label) result.options.label = art.options.label;
+                // Include custom value if present
+                if (art.options.value !== undefined) result.options.value = art.options.value;
             } else {
                 result.options = {
                     max_repos: art.options.max_repos || 10,
@@ -614,6 +654,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (firstArt.options.workflow) params.set('workflow', firstArt.options.workflow);
             // Add custom label if set
             if (firstArt.options.label) params.set('label', firstArt.options.label);
+            // Add custom value if set
+            if (firstArt.options.value !== undefined && firstArt.options.value !== '') params.set('value', firstArt.options.value);
             apiUrl = `${API_BASE_URL}/api/badge?${params.toString()}`;
         }
 
@@ -689,6 +731,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'workflow_status': 'badge_workflow',
             'license': 'badge_license',
             'forks': 'badge_forks',
+            'custom': 'badge_custom',
         };
 
         // Set username
@@ -735,6 +778,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         text_style: (art.options && art.options.text_style) || 'normal',
                         workflow: (art.options && art.options.workflow) || '',
                         label: (art.options && art.options.label) || '',
+                        value: (art.options && art.options.value) || '',
                     }
                 };
             }
